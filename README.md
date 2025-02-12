@@ -30,6 +30,11 @@
 
 ---
 
+## 🔗 Download
+- https://www.pling.com/p/2209171/
+
+---
+
 ## 🚀 Clone The Repo
 ```sh
 git clone https://github.com/shabdvasudeva/OneUI-Gallery-Clone.git && cd OneUI-Gallery-Clone
