@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/oui_background_color"
+    android:fitsSystemWindows="true"
+    tools:context=".SettingsActivity"
+    tools:ignore="AppCompatResource">
+
+    <dev.oneuiproject.oneui.layout.ToolbarLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:title="Settings"
+        app:expanded="false"
+        android:id="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:scrollbars="vertical"
+                android:padding="8dp"
+                android:paddingBottom="85dp"
+                android:clipToPadding="false"
+                android:id="@+id/recycler_view"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </LinearLayout>
+
+    </dev.oneuiproject.oneui.layout.ToolbarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

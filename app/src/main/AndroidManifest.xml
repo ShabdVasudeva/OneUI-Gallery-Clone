@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/OneUITheme">
+
+        <meta-data
+            android:name="SamsungBasicInteraction"
+            android:value="SEP10" />
+
+        <meta-data
+            android:name="com.samsung.android.icon_container.has_icon_container"
+            android:value="true" />
+
+        <meta-data
+            android:name="com.samsung.android.icon_container.feature_appicon"
+            android:value="ADAPTIVEICON_SHADOW" />
+
+        <meta-data
+            android:name="theming-meta"
+            android:value="meta_998_sesl_app" />
+
+        <meta-data
+            android:name="theming-meta-xml"
+            android:value="@xml/meta_998_sesl_app" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <activity
+            android:name="MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.MAIN" />
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AllActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PrivateSafe" />
+        <activity
+            android:name=".ViewActivity"
+            android:exported="false" />
+        <activity
+            android:name="apw.sec.android.gallery.securenv.PrivateImageViewer" />
+        <activity
+            android:name="apw.sec.android.gallery.AlbumViewer"
+            android:exported="true" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AboutActivity"
+            android:exported="true"/>
+        
+    </application>
+
+</manifest>

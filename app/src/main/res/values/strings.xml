@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gallery</string>
+    <string-array name="font_names">
+        <item>Roboto Slab</item>
+        <item>Play Fair</item>
+        <item>Permanent Marker</item>
+        <item>Handwriting</item>
+    </string-array>
+
+    <string-array name="font_values">
+        <item>RobotoSlab.ttf</item>
+        <item>PlayfairDisplay.ttf</item>
+        <item>PermanentMarker.ttf</item>
+        <item>Handwriting.ttf</item>
+    </string-array>
+</resources>

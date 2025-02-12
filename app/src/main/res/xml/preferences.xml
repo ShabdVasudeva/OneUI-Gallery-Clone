@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.Preference
+        android:key="safe"
+        android:title="Private Safe"
+        android:icon="@drawable/ai"
+        android:summary="Encrypt your private images in gallery, you can delete your image later too." />
+    <androidx.preference.Preference
+        android:key="quotes"
+        android:title="Quotes"
+        android:icon="@drawable/quote"
+        android:summary="Generate different quotes images" />
+</androidx.preference.PreferenceScreen>

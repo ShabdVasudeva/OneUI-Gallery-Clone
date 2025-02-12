@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dev.oneuiproject.oneui.widget.RoundLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/oui_background_color"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:paddingBottom="85dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
+
+</dev.oneuiproject.oneui.widget.RoundLinearLayout>

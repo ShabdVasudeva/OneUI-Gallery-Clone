@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AppCompatResource">
+
+    <item
+        android:id="@+id/share"
+        android:name="Share"
+        android:icon="@drawable/ic_oui_share_outline"
+        android:title="Share"
+        app:showAsAction="always"
+        app:iconTint="?actionMenuTextColor"
+        android:visible="true"
+        android:contentDescription="Share" />
+ 
+    <item
+        android:id="@+id/delete"
+        android:name="Delete"
+        android:icon="@drawable/ic_oui_delete_outline"
+        android:title="Delete"
+        app:showAsAction="always"
+        app:iconTint="?actionMenuTextColor"
+        android:visible="true"
+        android:contentDescription="Delete" />
+    
+    <item
+        android:id="@+id/save"
+        android:name="Save Locally"
+        android:icon="@drawable/ic_oui_save_outline"
+        android:title="Save Locally"
+        app:showAsAction="always"
+        app:iconTint="?actionMenuTextColor"
+        android:visible="true"
+        android:contentDescription="Save Locally" />
+
+</menu>

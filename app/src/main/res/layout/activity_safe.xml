@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/oui_background_color"
+    android:fitsSystemWindows="true"
+    tools:context=".PrivateSafe"
+    tools:ignore="AppCompatResource">
+
+    <dev.oneuiproject.oneui.layout.ToolbarLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:title="Private safe"
+        app:expanded="false"
+        android:id="@+id/toolbar">
+
+        <dev.oneuiproject.oneui.widget.RoundLinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@color/oui_background_color"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:scrollbars="vertical"
+                android:padding="8dp"
+                android:paddingBottom="85dp"
+                android:clipToPadding="false"
+                android:id="@+id/recycler_view"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </dev.oneuiproject.oneui.widget.RoundLinearLayout>
+
+    </dev.oneuiproject.oneui.layout.ToolbarLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:borderWidth="0dp"
+        android:elevation="0dp"
+        android:backgroundTint="#ff0071ff"
+        app:srcCompat="@drawable/ic_oui_add" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,41 @@
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.PreferenceCategory
+        android:key="cat4"
+        android:title="Quotes">
+        <ListPreference
+            android:key="font_preference"
+            android:title="Choose Font"
+            android:summary="Choose font for quotes image"
+            android:entries="@array/font_names"
+            android:entryValues="@array/font_values"
+            android:defaultValue="Roboto Slab" />
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory
+        android:key="cat3"
+        android:title="Private safe">
+        <androidx.preference.Preference
+            android:key="pvt"
+            android:title="Private Safe" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="DELETE_AFTER_SAVE"
+            android:defaultValue="false"
+            android:title="Delete"
+            android:summary="Delete the original image after saving it into private safe." />
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory
+        android:key="cat1"
+        android:title="Developer Info">
+        <androidx.preference.Preference
+            android:key="about"
+            android:title="About us"
+            android:summary="information about our team and platform" />
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory
+        android:key="cat2"
+        android:title="Application Info">
+        <androidx.preference.Preference
+            android:key="app_info"
+            android:title="About App"
+            android:summary="Build 15.0.1 By @AndroidPortWorld" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AppCompatResource">
+
+    <item
+        android:id="@+id/images"
+        android:name="Images"
+        android:icon="@drawable/ic_oui_image_outline"
+        android:title="Images"
+        app:showAsAction="always"
+        app:iconTint="?actionMenuTextColor"
+        android:visible="true"
+        android:contentDescription="Images" />
+    
+    <item
+        android:id="@+id/albums"
+        android:name="Albums"
+        android:icon="@drawable/ic_oui_automation"
+        android:title="Albums"
+        app:showAsAction="always"
+        app:iconTint="?actionMenuTextColor"
+        android:visible="true"
+        android:contentDescription="Albums" />
+
+    <item
+        android:id="@+id/search"
+        android:name="Search"
+        android:icon="@drawable/search"
+        android:title="Search"
+        app:showAsAction="always"
+        app:iconTint="?actionMenuTextColor"
+        android:visible="true"
+        android:contentDescription="Search" />
+    
+    <item
+        android:id="@+id/utilities"
+        android:name="Utils"
+        android:icon="@drawable/ic_oui_labs_outline"
+        android:title="Utils"
+        app:showAsAction="always"
+        app:iconTint="?actionMenuTextColor"
+        android:visible="true"
+        android:contentDescription="Utils" />
+    
+</menu>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AppCompatResource">
+
+    <item
+        android:id="@+id/settings"
+        android:name="Settings"
+        android:contentDescription="settings"
+        android:title="Settings" />
+
+    <item
+        android:id="@+id/all"
+        android:name="All"
+        android:icon="@drawable/ic_oui_image_outline"
+        android:title="All"
+        app:showAsAction="always"
+        app:iconTint="?actionMenuTextColor"
+        android:visible="true"
+        android:contentDescription="All" />
+    
+</menu>

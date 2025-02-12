@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dev.oneuiproject.oneui.layout.AppInfoLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/app_info_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/about_source_code"
+        style="@style/OneUI.AppInfoButton"
+        android:text="Source code" />
+
+</dev.oneuiproject.oneui.layout.AppInfoLayout>
