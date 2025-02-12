@@ -20,7 +20,7 @@
 ## 💻 Tech Stack  
 #### **Languages & Frameworks**
 ![Kotlin](https://img.shields.io/badge/Kotlin-0095D5.svg?style=flat-square&logo=kotlin&logoColor=white)
-![Java](https://img.shields.io/badge/Java-%23ED8B00.svg?style=flat-square&logo=java&logoColor=white)
+![Javascript](https://camo.githubusercontent.com/b7fe7118de8f3d4feaf3ec1948911cad2c9a0f5afbd20b394a7ef52f3fe67aaa/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4a6176615363726970742d4637444631452e7376673f7374796c653d666c61742d737175617265266c6f676f3d6a617661736372697074266c6f676f436f6c6f723d626c61636b)
 ![SQL](https://img.shields.io/badge/SQL-4479A1.svg?style=flat-square&logo=postgresql&logoColor=white)
 
 #### **Tools & Technologies**
