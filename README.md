@@ -26,7 +26,7 @@
 #### **Tools & Technologies**
 ![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84.svg?style=flat-square&logo=android-studio&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-003B57.svg?style=flat-square&logo=sqlite&logoColor=white)
-![OneUI Design](https://img.shields.io/badge/OneUI Design%20-6200EE.svg?style=flat-square&logo=android&logoColor=white)
+![OneUI Design](https://img.shields.io/badge/OneUI%20-6200EE.svg?style=flat-square&logo=android&logoColor=white)
 
 ---
 
