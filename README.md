@@ -37,4 +37,4 @@
 
 ## 🚀 Clone The Repo
 ```sh
-git clone https://github.com/shabdvasudeva/OneUI-Gallery-Clone.git && cd OneUI-Gallery-Clone
+pkg install git && git clone https://github.com/shabdvasudeva/OneUI-Gallery-Clone.git && cd OneUI-Gallery-Clone
