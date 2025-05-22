@@ -14,6 +14,7 @@
   env = {
     ANDROID_HOME = "$HOME/Android/Sdk";
     ANDROID_SDK_ROOT = "$HOME/Android/Sdk";
+    sdkmanager = "$HOME/Android/Sdk/cmdline-tools/latest/bin/sdkmanager";
   };
 
   idx = {
