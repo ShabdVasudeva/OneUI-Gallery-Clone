@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import apw.sec.android.gallery.components.Image
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class MediaAdapter(
@@ -15,7 +16,7 @@ class MediaAdapter(
 ) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
 
     inner class MediaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.imageView)
+        val imageView: Image = view.findViewById(R.id.imageView)
         val playButton: ImageView = view.findViewById(R.id.playButton)
         init {
             view.setOnClickListener {

@@ -6,7 +6,7 @@
     android:background="@drawable/image_back"
     android:layout_margin="4dp">
 
-    <ImageView
+    <apw.sec.android.gallery.components.Image
         android:layout_height="74dp"
         android:layout_width="match_parent"
         android:scaleType="centerCrop"
