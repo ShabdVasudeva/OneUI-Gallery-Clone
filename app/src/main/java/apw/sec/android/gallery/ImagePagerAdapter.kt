@@ -35,7 +35,7 @@ class ImagePagerAdapter(
             holder.binding.playButton.visibility = View.VISIBLE
             holder.binding.playButton.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndType(mediaFile.uri, "video/*")
+                    setDataAndType(Uri.parse(mediaFile.uri), "video/*")
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
                 context.startActivity(intent)

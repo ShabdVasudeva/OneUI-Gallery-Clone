@@ -24,7 +24,7 @@ class SearchAdapter(
             view.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, ViewActivity::class.java).apply {
-                    putParcelableArrayListExtra("mediaList", ArrayList(mediaFiles))
+                    putExtra("mediauri", mediaFiles[adapterPosition].uri.toString())
                     putExtra("position", adapterPosition)
                 }
                 context.startActivity(intent)

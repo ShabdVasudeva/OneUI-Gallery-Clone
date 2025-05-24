@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import apw.sec.android.gallery.components.Image
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import apw.sec.android.gallery.R
 
 class MediaAdapter(
     private val mediaFiles: List<MediaFile>
@@ -22,7 +23,7 @@ class MediaAdapter(
             view.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, ViewActivity::class.java).apply {
-                    putParcelableArrayListExtra("mediaList", ArrayList(mediaFiles))
+                    putExtra("imageList", ArrayList(mediaFiles))
                     putExtra("position", adapterPosition)
                 }
                 context.startActivity(intent)

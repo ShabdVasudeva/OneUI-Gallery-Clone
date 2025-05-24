@@ -14,6 +14,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:titleTextColor="#ffffff"
+        android:subtitle="Hello"
         android:background="@android:color/black"
         android:elevation="4dp"
         app:background="@color/sesl_action_bar_background_color_dark"

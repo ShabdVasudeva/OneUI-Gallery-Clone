@@ -22,7 +22,12 @@ import java.io.*
 import android.app.*
 import android.provider.MediaStore
 import android.content.*
+import androidx.lifecycle.*
+import android.content.res.ColorStateList
 import apw.sec.android.gallery.databinding.*
+import apw.sec.android.gallery.viewmodel.MediaViewModel
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ViewActivity: AppCompatActivity() {
     private var _binding: ActivityViewBinding? = null
@@ -39,7 +44,10 @@ class ViewActivity: AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener{
             onBackPressed()
         }
-        imageList = intent.getParcelableArrayListExtra("mediaList") ?: emptyList()
+        binding.toolbar.setTitleTextColor(Color.WHITE)
+        binding.toolbar.setNavigationIconTint(Color.WHITE)
+        @Suppress("UNCHECKED_CAST")
+        imageList = intent.getSerializableExtra("imageList") as ArrayList<MediaFile>
         startPosition = intent.getIntExtra("position", 0)
         getSupportActionBar()!!.title = imageList[startPosition].name
         window.navigationBarColor = Color.parseColor("#000000")
@@ -55,27 +63,29 @@ class ViewActivity: AppCompatActivity() {
         val adapter = ImagePagerAdapter(this@ViewActivity, imageList){toggleUIVisibility()}
         binding.viewPager.adapter = adapter
         binding.viewPager.setCurrentItem(startPosition, false)
+        binding.bottomBar.itemTextColor = ColorStateList.valueOf(Color.WHITE)
+        binding.bottomBar.itemIconTintList = ColorStateList.valueOf(Color.WHITE)
         binding.bottomBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.share -> {
                     val currentPosition = binding.viewPager.currentItem
-                    val currentUri = imageList[currentPosition].uri
+                    val currentUri = Uri.parse(imageList[currentPosition].uri)
                     shareImage(this, currentUri)
                     true
                 }
                 R.id.edit -> {
                     val pos = binding.viewPager.currentItem
-                    editImage(this, imageList[pos].uri)
+                    editImage(this, Uri.parse(imageList[pos].uri))
                     true
                 }
                 R.id.delete ->{
                     val pos = binding.viewPager.currentItem
-                    deleteImageFromUri(this, imageList[pos].uri)
+                    deleteImageFromUri(this, Uri.parse(imageList[pos].uri))
                     true
                 }
                 R.id.info ->{
                     val pos = binding.viewPager.currentItem
-                    showImageInfoDialog(this, imageList[pos].uri)
+                    showImageInfoDialog(this, Uri.parse(imageList[pos].uri))
                     true
                 }
                 else -> false

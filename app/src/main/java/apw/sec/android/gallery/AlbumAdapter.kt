@@ -30,7 +30,7 @@ class AlbumAdapter(
 
                 val intent = Intent(context, AlbumViewer::class.java).apply {
                     putExtra("folderName", folderName)
-                    putParcelableArrayListExtra("mediaList", ArrayList(folderMediaList))
+                    putExtra("mediauri", folderMediaList[adapterPosition].uri.toString())
                 }
                 context.startActivity(intent)
             }

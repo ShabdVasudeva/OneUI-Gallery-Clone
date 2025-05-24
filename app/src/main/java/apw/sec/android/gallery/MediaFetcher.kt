@@ -50,7 +50,7 @@ class MediaFetcher(private val context: Context) {
                 val name = it.getString(nameColumn)
                 val contentUri = Uri.withAppendedPath(mediaUri, id.toString())
                 val type = if (mediaUri == MediaStore.Images.Media.EXTERNAL_CONTENT_URI) "Image" else "Video"
-                mediaFiles.add(MediaFile(contentUri, name, type, null))
+                mediaFiles.add(MediaFile(contentUri.toString(), name, type, null))
             }
         }
 

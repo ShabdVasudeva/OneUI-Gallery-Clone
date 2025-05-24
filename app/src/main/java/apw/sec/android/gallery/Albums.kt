@@ -41,7 +41,7 @@ class Albums(private val context: Context) {
                 val folderName = it.getString(bucketColumn) ?: "Unknown"
                 val contentUri = Uri.withAppendedPath(mediaUri, id.toString())
 
-                mediaFiles.add(MediaFile(contentUri, name, "Image", folderName))
+                mediaFiles.add(MediaFile(contentUri.toString(), name, "Image", folderName))
             }
         }
 

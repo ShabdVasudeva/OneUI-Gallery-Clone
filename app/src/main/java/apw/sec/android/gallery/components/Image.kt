@@ -22,6 +22,7 @@ class Image @JvmOverloads constructor(
             typedArray.recycle()
         }
     }
+    
     override fun onDraw(canvas: Canvas){
         path.reset()
         val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
