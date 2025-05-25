@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
                 super.onViewCreated(view, savedInstanceState)
                 val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-                recyclerView.layoutManager = GridLayoutManager(context, 2)
+                recyclerView.layoutManager = GridLayoutManager(context, 3)
                 loadImages()
                 recyclerView.adapter = adapter
             }

@@ -14,15 +14,20 @@ class AlbumViewer: AppCompatActivity(){
     private val binding get() = _binding!!
     private var mediaFiles: List<MediaFile> = listOf()
     private lateinit var adapter: MediaAdapter
-    private val viewmodel: MediaViewModel = ViewModelProvider(this@AlbumViewer)[MediaViewModel::class.java]
+    private lateinit var viewmodel: MediaViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         _binding = LayoutAlbumViewerBinding.inflate(getLayoutInflater())
         setContentView(binding.root)
-        val folderName = intent.getStringExtra("folderName")
+        viewmodel = ViewModelProvider(this@AlbumViewer)[MediaViewModel::class.java]
+        val folderName: String? = intent.getStringExtra("folderName")
         binding.toolbar.setNavigationButtonAsBack()
         binding.toolbar.setTitle(folderName)
-        mediaFiles = viewmodel.getAllData()
+        mediaFiles = fetchMediaFilesFromFolder(folderName!!)
+        setupRecyclerView(mediaFiles, folderName)
+    }
+
+    fun setupRecyclerView(mediaFiles: List<MediaFile>, folderName: String?){
         getSupportActionBar()!!.title = folderName
         Log.e("AlbumError",mediaFiles.size.toString())
         adapter = MediaAdapter(mediaFiles)
@@ -31,8 +36,9 @@ class AlbumViewer: AppCompatActivity(){
     }
     
     private fun fetchMediaFilesFromFolder(folderName: String?): List<MediaFile> {
-        val allMediaFiles = FetchAll(this).fetchMediaFiles()
-        return allMediaFiles
+        val allMediaFiles = Albums(this).fetchAlbums()
+        val filteredMediaFiles = allMediaFiles.filter { it.folderName == folderName }
+        return filteredMediaFiles
     }
     
     override fun onDestroy(){

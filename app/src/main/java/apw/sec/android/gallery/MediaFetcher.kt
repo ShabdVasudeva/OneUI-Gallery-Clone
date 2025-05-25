@@ -18,7 +18,7 @@ class MediaFetcher(private val context: Context) {
         return mediaFiles
     }
 
-    private fun fetchMediaFromFolder(
+    fun fetchMediaFromFolder(
         contentResolver: ContentResolver,
         mediaUri: Uri,
         folderName: String

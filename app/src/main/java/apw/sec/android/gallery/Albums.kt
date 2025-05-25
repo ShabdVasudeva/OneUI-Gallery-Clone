@@ -1,6 +1,5 @@
 package apw.sec.android.gallery
 
-import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
@@ -10,9 +9,23 @@ class Albums(private val context: Context) {
 
     fun fetchAlbums(): List<MediaFile> {
         val mediaFiles = mutableListOf<MediaFile>()
-        val contentResolver = context.contentResolver
-        val mediaUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
+        // Fetch Images
+        mediaFiles.addAll(fetchMedia(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            "Image"
+        ))
+
+        mediaFiles.addAll(fetchMedia(
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+            "Video"
+        ))
+
+        return mediaFiles.sortedBy { it.folderName?.lowercase() ?: "" }
+    }
+
+    private fun fetchMedia(mediaUri: Uri, type: String): List<MediaFile> {
+        val list = mutableListOf<MediaFile>()
         val projection = arrayOf(
             MediaStore.MediaColumns._ID,
             MediaStore.MediaColumns.DISPLAY_NAME,
@@ -20,7 +33,7 @@ class Albums(private val context: Context) {
             MediaStore.MediaColumns.BUCKET_DISPLAY_NAME
         )
 
-        val cursor: Cursor? = contentResolver.query(
+        val cursor: Cursor? = context.contentResolver.query(
             mediaUri,
             projection,
             null,
@@ -41,10 +54,10 @@ class Albums(private val context: Context) {
                 val folderName = it.getString(bucketColumn) ?: "Unknown"
                 val contentUri = Uri.withAppendedPath(mediaUri, id.toString())
 
-                mediaFiles.add(MediaFile(contentUri.toString(), name, "Image", folderName))
+                list.add(MediaFile(contentUri.toString(), name, type, folderName))
             }
         }
 
-        return mediaFiles
+        return list
     }
 }

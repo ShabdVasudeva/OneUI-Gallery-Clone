@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
      xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
      android:layout_height="wrap_content"
      android:layout_width="match_parent"
      android:background="@drawable/image_back"
@@ -11,8 +12,8 @@
          android:layout_width="match_parent"
          android:orientation="vertical">
 
-        <apw.sec.android.gallery.components.Image
-             android:layout_height="160.0dip"
+        <apw.sec.android.gallery.components.AlbumImage
+             android:layout_height="107.0dip"
              android:layout_width="match_parent"
              android:scaleType="centerCrop"
              android:id="@+id/imageView" />

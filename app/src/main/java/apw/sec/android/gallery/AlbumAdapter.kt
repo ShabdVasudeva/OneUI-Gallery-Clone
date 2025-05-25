@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import apw.sec.android.gallery.components.Image
+import apw.sec.android.gallery.components.AlbumImage
 
 class AlbumAdapter(
     private val context: Context,
@@ -20,7 +20,7 @@ class AlbumAdapter(
     private val albumList = albumMap.keys.toList()
 
     inner class MediaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: Image = view.findViewById(R.id.imageView)
+        val imageView: AlbumImage = view.findViewById(R.id.imageView)
         val folderNameTextView: TextView = view.findViewById(R.id.text)
 
         init {
@@ -30,7 +30,6 @@ class AlbumAdapter(
 
                 val intent = Intent(context, AlbumViewer::class.java).apply {
                     putExtra("folderName", folderName)
-                    putExtra("mediauri", folderMediaList[adapterPosition].uri.toString())
                 }
                 context.startActivity(intent)
             }
