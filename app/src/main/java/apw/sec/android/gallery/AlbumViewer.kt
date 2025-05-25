@@ -6,7 +6,6 @@ import apw.sec.android.gallery.databinding.*
 import androidx.recyclerview.widget.*
 import android.util.Log
 import androidx.lifecycle.*
-import apw.sec.android.gallery.viewmodel.MediaViewModel
 
 class AlbumViewer: AppCompatActivity(){
     
@@ -14,12 +13,10 @@ class AlbumViewer: AppCompatActivity(){
     private val binding get() = _binding!!
     private var mediaFiles: List<MediaFile> = listOf()
     private lateinit var adapter: MediaAdapter
-    private lateinit var viewmodel: MediaViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         _binding = LayoutAlbumViewerBinding.inflate(getLayoutInflater())
         setContentView(binding.root)
-        viewmodel = ViewModelProvider(this@AlbumViewer)[MediaViewModel::class.java]
         val folderName: String? = intent.getStringExtra("folderName")
         binding.toolbar.setNavigationButtonAsBack()
         binding.toolbar.setTitle(folderName)

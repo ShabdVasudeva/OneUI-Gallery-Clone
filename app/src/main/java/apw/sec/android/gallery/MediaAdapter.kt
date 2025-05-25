@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide
 import apw.sec.android.gallery.components.Image
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import apw.sec.android.gallery.R
+import apw.sec.android.gallery.data.MediaHub
+import java.util.UUID
 
 class MediaAdapter(
     private val mediaFiles: List<MediaFile>
@@ -21,9 +23,12 @@ class MediaAdapter(
         val playButton: ImageView = view.findViewById(R.id.playButton)
         init {
             view.setOnClickListener {
+                val key: String = UUID.randomUUID().toString()
+                MediaHub.save(key, ArrayList(mediaFiles))
                 val context = itemView.context
                 val intent = Intent(context, ViewActivity::class.java).apply {
-                    putExtra("imageList", ArrayList(mediaFiles))
+                    // putExtra("imageList", ArrayList(mediaFiles))
+                    putExtra("media_key", key)
                     putExtra("position", adapterPosition)
                 }
                 context.startActivity(intent)

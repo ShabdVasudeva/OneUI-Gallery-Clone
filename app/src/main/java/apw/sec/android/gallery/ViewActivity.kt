@@ -25,15 +25,17 @@ import android.content.*
 import androidx.lifecycle.*
 import android.content.res.ColorStateList
 import apw.sec.android.gallery.databinding.*
-import apw.sec.android.gallery.viewmodel.MediaViewModel
+import apw.sec.android.gallery.data.MediaHub
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlin.collections.emptyList
 
 class ViewActivity: AppCompatActivity() {
     private var _binding: ActivityViewBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageList: List<MediaFile>
     private var startPosition: Int = 0
+    private var key: String? = ""
     private var isUIVisible = true
     
     override fun onCreate(savedInstanceState: Bundle?){
@@ -46,9 +48,11 @@ class ViewActivity: AppCompatActivity() {
         }
         binding.toolbar.setTitleTextColor(Color.WHITE)
         binding.toolbar.setNavigationIconTint(Color.WHITE)
-        @Suppress("UNCHECKED_CAST")
-        imageList = intent.getSerializableExtra("imageList") as ArrayList<MediaFile>
+        /* @Suppress("UNCHECKED_CAST")
+        imageList = intent.getSerializableExtra("imageList") as ArrayList<MediaFile>  */
+        key = intent.getStringExtra("media_key")
         startPosition = intent.getIntExtra("position", 0)
+        imageList = MediaHub.get(key!!) ?: emptyList()
         getSupportActionBar()!!.title = imageList[startPosition].name
         window.navigationBarColor = Color.parseColor("#000000")
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
@@ -170,5 +174,8 @@ class ViewActivity: AppCompatActivity() {
     override fun onDestroy(){
         super.onDestroy()
         _binding = null
+        key?.let { 
+            MediaHub.remove(it)
+        }
     }
 }

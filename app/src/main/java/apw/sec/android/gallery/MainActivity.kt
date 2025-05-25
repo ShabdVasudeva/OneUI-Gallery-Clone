@@ -24,7 +24,6 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import android.content.Intent
 import com.google.android.material.dialog.*
 import apw.sec.android.gallery.databinding.ActivityMainBinding
-import apw.sec.android.gallery.viewmodel.MediaViewModel
 
 class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
 
@@ -116,7 +115,6 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
 
             private var mediaList: List<MediaFile>? = null
             private lateinit var adapter: MediaAdapter
-            private lateinit var model: MediaViewModel
             override fun onCreateView(
                 inflater: LayoutInflater, container: ViewGroup?,
                 savedInstanceState: Bundle?
@@ -126,7 +124,6 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
 
             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
                 super.onViewCreated(view, savedInstanceState)
-                model = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
                 val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
                 recyclerView.layoutManager = GridLayoutManager(context, 4)
                 loadImages()
@@ -136,7 +133,6 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
             private fun loadImages() {
                 val mediaFetcher = MediaFetcher(requireContext())
                 mediaList = mediaFetcher.fetchMediaFiles()
-                model.saveMediaData(mediaList!!)
                 adapter = MediaAdapter(mediaList!!)
             }
         }
