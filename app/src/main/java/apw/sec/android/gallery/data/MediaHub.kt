@@ -2,7 +2,7 @@ package apw.sec.android.gallery.data;
 
 import apw.sec.android.gallery.MediaFile
 
-object MediaHub{
+object MediaHub {
     
     private val registry = mutableMapOf<String, List<MediaFile>>()
 
