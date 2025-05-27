@@ -1,33 +1,23 @@
 package apw.sec.android.gallery
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import android.view.*
 import androidx.viewpager2.widget.ViewPager2
-import android.util.Log
 import android.graphics.*
 import android.text.*
-import android.provider.Settings
-import android.Manifest
 import android.net.*
 import java.io.*
-import android.app.*
 import android.provider.MediaStore
 import android.content.*
-import androidx.lifecycle.*
 import android.content.res.ColorStateList
+import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import apw.sec.android.gallery.databinding.*
 import apw.sec.android.gallery.data.MediaHub
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.collections.emptyList
 
 class ViewActivity: AppCompatActivity() {
@@ -48,25 +38,43 @@ class ViewActivity: AppCompatActivity() {
         }
         binding.toolbar.setTitleTextColor(Color.WHITE)
         binding.toolbar.setNavigationIconTint(Color.WHITE)
-        /* @Suppress("UNCHECKED_CAST")
-        imageList = intent.getSerializableExtra("imageList") as ArrayList<MediaFile>  */
         key = intent.getStringExtra("media_key")
         startPosition = intent.getIntExtra("position", 0)
         imageList = MediaHub.get(key!!) ?: emptyList()
-        getSupportActionBar()!!.title = imageList[startPosition].name
         window.navigationBarColor = Color.parseColor("#000000")
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         window.statusBarColor = Color.parseColor("#000000")
         val currentPosition = binding.viewPager.currentItem
+        supportActionBar!!.title = getImageDate(applicationContext, imageList[currentPosition].uri.toUri()) ?: imageList[startPosition].name
+        supportActionBar!!.subtitle = getImageTime(applicationContext, imageList[currentPosition].uri.toUri()) ?: ""
+        binding.toolbar.setSubtitleTextColor(Color.GRAY)
         binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(pos: Int){
                 super.onPageSelected(pos)
-                getSupportActionBar()!!.title = imageList[pos].name
+                supportActionBar!!.title = getImageDate(applicationContext, imageList[pos].uri.toUri()) ?: imageList[pos].name
+                supportActionBar!!.subtitle = getImageTime(applicationContext, imageList[pos].uri.toUri()) ?: ""
             }
         })
         val adapter = ImagePagerAdapter(this@ViewActivity, imageList){toggleUIVisibility()}
         binding.viewPager.adapter = adapter
         binding.viewPager.setCurrentItem(startPosition, false)
+        val filmstripAdapter: FilmstripAdapter = FilmstripAdapter(imageList){ position ->
+            binding.viewPager.setCurrentItem(position, true)
+        }
+        binding.filmStripRecyclerView.layoutManager = LinearLayoutManager(this@ViewActivity, LinearLayoutManager.HORIZONTAL, false)
+        binding.filmStripRecyclerView.adapter = filmstripAdapter
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(binding.filmStripRecyclerView)
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                supportActionBar?.title = imageList[position].name
+                filmstripAdapter.setSelectedPosition(position)
+                binding.filmStripRecyclerView.post{
+                    binding.filmStripRecyclerView.smoothScrollToPosition(position)
+                }
+            }
+        })
         binding.bottomBar.itemTextColor = ColorStateList.valueOf(Color.WHITE)
         binding.bottomBar.itemIconTintList = ColorStateList.valueOf(Color.WHITE)
         binding.bottomBar.setOnItemSelectedListener { item ->
@@ -138,7 +146,58 @@ class ViewActivity: AppCompatActivity() {
         builder.setPositiveButton("OK", null)
         builder.show()
     }
-    
+
+    fun getImageTime(context: Context, uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.DATE_MODIFIED)
+
+        context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val dateTakenIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN)
+                val dateModifiedIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)
+
+                val dateTaken = if (dateTakenIndex != -1) cursor.getLong(dateTakenIndex) else 0L
+                val dateModified = if (dateModifiedIndex != -1) cursor.getLong(dateModifiedIndex) else 0L
+
+                val date = if (dateTaken != 0L) dateTaken else dateModified
+                return java.text.SimpleDateFormat("hh:mm a", java.util.Locale.getDefault())
+                    .format(java.util.Date(date))
+            }
+        }
+        return null
+    }
+
+    fun getImageDate(context: Context, uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.DATE_MODIFIED)
+        val resolver = context.contentResolver
+
+        resolver.query(uri, projection, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val dateTakenIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+                val dateModifiedIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_MODIFIED)
+
+                val dateTaken = cursor.getLong(dateTakenIndex)
+                val dateModified = cursor.getLong(dateModifiedIndex)
+
+                val timestamp = if (dateTaken > 0) dateTaken else dateModified
+                val imageDate = java.util.Date(timestamp)
+
+                val now = java.util.Calendar.getInstance().time
+
+                val dateFormat = java.text.SimpleDateFormat("yyyyMMdd", java.util.Locale.getDefault())
+                val imageDay = dateFormat.format(imageDate)
+                val currentDay = dateFormat.format(now)
+
+                return if (imageDay == currentDay) {
+                    "Today"
+                } else {
+                    java.text.SimpleDateFormat("dd MMM", java.util.Locale.getDefault()).format(imageDate)
+                }
+            }
+        }
+        return null
+    }
+
+
     fun getFilePathFromUri(context: Context, uri: Uri): String? {
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         val cursor = context.contentResolver.query(uri, projection, null, null, null)

@@ -1,15 +1,15 @@
 package apw.sec.android.gallery
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.content.Intent
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import apw.sec.android.gallery.data.MediaHub
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
+import java.util.UUID
 
 class SearchAdapter(
     private val mediaFiles: List<MediaFile>,
@@ -22,9 +22,11 @@ class SearchAdapter(
         val playButton: ImageView = view.findViewById(R.id.playButton)
         init {
             view.setOnClickListener {
+                val key: String = UUID.randomUUID().toString()
+                MediaHub.save(key, ArrayList(mediaFiles))
                 val context = itemView.context
                 val intent = Intent(context, ViewActivity::class.java).apply {
-                    putExtra("mediauri", mediaFiles[adapterPosition].uri.toString())
+                    putExtra("media_key", key)
                     putExtra("position", adapterPosition)
                 }
                 context.startActivity(intent)

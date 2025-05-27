@@ -13,7 +13,7 @@
         app:iconTint="?actionMenuTextColor"
         android:visible="true"
         android:contentDescription="Images" />
-    
+
     <item
         android:id="@+id/albums"
         android:name="Albums"
@@ -33,7 +33,7 @@
         app:iconTint="?actionMenuTextColor"
         android:visible="true"
         android:contentDescription="Search" />
-    
+
     <item
         android:id="@+id/utilities"
         android:name="Utils"
@@ -43,5 +43,5 @@
         app:iconTint="?actionMenuTextColor"
         android:visible="true"
         android:contentDescription="Utils" />
-    
+
 </menu>

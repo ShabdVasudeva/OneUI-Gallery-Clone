@@ -1,11 +1,11 @@
 package apw.sec.android.gallery
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import apw.sec.android.gallery.databinding.ActivityAboutBinding
-import dev.oneuiproject.oneui.widget.Toast
+import dev.oneuiproject.oneui.layout.AppInfoLayout
 
 class AboutActivity: AppCompatActivity(){
     
@@ -17,9 +17,13 @@ class AboutActivity: AppCompatActivity(){
         _binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.aboutSourceCode.setOnClickListener{
-            val intent: Intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ShabdVasudeva/OneUI-Gallery-Clone"))
-            startActivity(intent)
-            binding.appInfoLayout.setStatus(2)
+            val intent: Intent = Intent(
+                Intent.ACTION_VIEW,
+                "https://github.com/ShabdVasudeva/OneUI-Gallery-Clone".toUri()
+            ).apply {
+                startActivity(this)
+            }
+            binding.appInfoLayout.status = AppInfoLayout.NO_UPDATE
         }
     }
     

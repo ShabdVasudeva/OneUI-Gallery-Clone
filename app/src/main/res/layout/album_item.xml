@@ -26,6 +26,15 @@
              android:background="@color/oui_background_color"
              android:id="@+id/text" />
 
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="left"
+            android:visibility="gone"
+            android:layout_marginTop="3dp"
+            android:background="@color/oui_background_color"
+            android:id="@+id/text2" />
+
     </LinearLayout>
 
 </FrameLayout>

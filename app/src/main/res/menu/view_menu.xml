@@ -6,19 +6,17 @@
 
     <item
         android:id="@+id/share"
-        android:name="Share"
         android:icon="@drawable/ic_oui_share_outline"
-        android:title="Share"
+        android:title="share"
         app:showAsAction="always"
         app:iconTint="?actionMenuTextColor"
         android:visible="true"
         android:contentDescription="Share" />
-    
+
     <item
         android:id="@+id/edit"
-        android:name="Edit"
         android:icon="@drawable/ic_oui_edit_outline"
-        android:title="Edit"
+        android:title="edit"
         app:showAsAction="always"
         app:iconTint="?actionMenuTextColor"
         android:visible="true"
@@ -26,22 +24,20 @@
 
     <item
         android:id="@+id/delete"
-        android:name="Delete"
         android:icon="@drawable/ic_oui_delete_outline"
-        android:title="Delete"
+        android:title="delete"
         app:showAsAction="always"
         app:iconTint="?actionMenuTextColor"
         android:visible="true"
         android:contentDescription="Delete" />
-    
+
     <item
         android:id="@+id/info"
-        android:name="Info"
         android:icon="@drawable/ic_oui_info_outline"
-        android:title="Info"
+        android:title="info"
         app:showAsAction="always"
         app:iconTint="?actionMenuTextColor"
         android:visible="true"
         android:contentDescription="Info" />
-    
+
 </menu>

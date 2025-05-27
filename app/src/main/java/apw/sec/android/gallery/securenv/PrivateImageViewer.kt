@@ -3,6 +3,7 @@ package apw.sec.android.gallery.securenv
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -29,6 +30,7 @@ class PrivateImageViewer: AppCompatActivity(){
         private var startPosition: Int = 0
         private var isUIVisible = true
         private lateinit var database: PrivateSafeDatabase
+        private var key: String? = ""
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,10 @@ class PrivateImageViewer: AppCompatActivity(){
         binding.toolbar.setNavigationOnClickListener{
             onBackPressed()
         }
+        binding.toolbar.setNavigationIconTint(Color.WHITE)
+        binding.toolbar.setTitleTextColor(Color.WHITE)
+        binding.bottomBar2.itemTextColor = ColorStateList.valueOf(Color.WHITE)
+        binding.bottomBar2.itemIconTintList = ColorStateList.valueOf(Color.WHITE)
         window.setFlags(
             WINDOW_FLAGS,
             WINDOW_FLAGS
@@ -47,7 +53,8 @@ class PrivateImageViewer: AppCompatActivity(){
         window.navigationBarColor = Color.parseColor("#000000")
         window.statusBarColor = Color.parseColor("#000000")
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        imageList = intent.getParcelableArrayListExtra("mediaList") ?: emptyList()
+        key = intent.getStringExtra("media_key")
+        imageList = PrivateMediaHub.get(key!!)!!
         startPosition = intent.getIntExtra("position", 0)
         val adapter = PrivatePagerAdapter(this, imageList){toggleUIVisibility()}
         binding.viewPager.adapter = adapter
@@ -90,5 +97,7 @@ class PrivateImageViewer: AppCompatActivity(){
     override fun onDestroy(){
         super.onDestroy()
         _binding = null
+        PrivateMediaHub.remove(key!!)
+        key = null
     }
 }

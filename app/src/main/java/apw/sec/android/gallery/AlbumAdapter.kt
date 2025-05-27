@@ -22,12 +22,12 @@ class AlbumAdapter(
     inner class MediaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: AlbumImage = view.findViewById(R.id.imageView)
         val folderNameTextView: TextView = view.findViewById(R.id.text)
+        val folderCountTextView: TextView = view.findViewById(R.id.text2)
 
         init {
             view.setOnClickListener {
                 val folderName = albumList[adapterPosition]
                 val folderMediaList = albumMap[folderName] ?: emptyList()
-
                 val intent = Intent(context, AlbumViewer::class.java).apply {
                     putExtra("folderName", folderName)
                 }
@@ -52,6 +52,8 @@ class AlbumAdapter(
             .load(firstImageUri)
             .centerCrop()
             .into(holder.imageView)
+        val count: Int = albumMap[folderName]?.count()  ?: 0
+        holder.folderCountTextView.text = count.toString()
     }
 
     override fun getItemCount(): Int = albumList.size

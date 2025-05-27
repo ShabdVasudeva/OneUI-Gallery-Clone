@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
+    android:layout_width="match_parent"
+    android:background="@color/sesl_action_bar_background_color_dark"
+    android:fitsSystemWindows="true"
+    tools:context=".ViewActivity"
+    tools:ignore="AppCompatResource">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:titleTextColor="#ffffff"
         android:background="@android:color/black"
         android:elevation="4dp"
-        app:title=" "
+        app:title="Private Image"
+        app:background="@color/sesl_action_bar_background_color_dark"
         app:navigationIcon="@drawable/ic_oui_back"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +35,10 @@
         android:id="@+id/bottomBar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#000000"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_gravity="bottom"
         app:menu="@menu/private_view_menu" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

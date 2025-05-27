@@ -10,6 +10,7 @@ import apw.sec.android.gallery.R
 import android.content.Intent
 import apw.sec.android.gallery.securenv.*
 import androidx.recyclerview.widget.RecyclerView
+import java.util.UUID
 
 class ImageAdapter(
     private val imageList: List<ImageItem>,
@@ -20,8 +21,11 @@ class ImageAdapter(
         val imageView: ImageView = view.findViewById(R.id.imageView)
         init{
             view.setOnClickListener {
+                val key: String = UUID.randomUUID().toString()
+                PrivateMediaHub.save(key, ArrayList(imageList))
                 val context = itemView.context
                 val intent = Intent(context, PrivateImageViewer::class.java).apply {
+                    putExtra("media_key", key)
                     putParcelableArrayListExtra("mediaList", ArrayList(imageList))
                     putExtra("position", adapterPosition)
                 }

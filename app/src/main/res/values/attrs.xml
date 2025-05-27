@@ -6,4 +6,7 @@
     <declare-styleable name="AlbumImage">
         <attr name="radius" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="FilmImageView">
+        <attr name="customCorner" format="dimension"/>
+    </declare-styleable>
 </resources>
