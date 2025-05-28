@@ -24,7 +24,7 @@ class MediaAdapter(
         init {
             view.setOnClickListener {
                 val key: String = UUID.randomUUID().toString()
-                MediaHub.save(key, ArrayList(mediaFiles))
+                MediaHub.save(key, mediaFiles.toMutableList())
                 val context = itemView.context
                 val intent = Intent(context, ViewActivity::class.java).apply {
                     // putExtra("imageList", ArrayList(mediaFiles))

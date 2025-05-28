@@ -56,6 +56,7 @@ configurations.all{
 }
 
 dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("io.getstream:photoview:1.0.2")
     implementation("org.mozilla:rhino:1.7.14")
     implementation("androidx.core:core-ktx:1.10.0")

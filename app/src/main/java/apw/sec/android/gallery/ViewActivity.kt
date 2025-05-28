@@ -14,16 +14,20 @@ import java.io.*
 import android.provider.MediaStore
 import android.content.*
 import android.content.res.ColorStateList
+import android.os.Build
+import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import apw.sec.android.gallery.databinding.*
 import apw.sec.android.gallery.data.MediaHub
-import kotlin.collections.emptyList
+import androidx.core.graphics.toColorInt
 
 class ViewActivity: AppCompatActivity() {
     private var _binding: ActivityViewBinding? = null
     private val binding get() = _binding!!
-    private lateinit var imageList: List<MediaFile>
+    private lateinit var imageList: MutableList<MediaFile>
+    private lateinit var adapter: ImagePagerAdapter
+    private lateinit var filmstripAdapter: FilmstripAdapter
     private var startPosition: Int = 0
     private var key: String? = ""
     private var isUIVisible = true
@@ -40,10 +44,10 @@ class ViewActivity: AppCompatActivity() {
         binding.toolbar.setNavigationIconTint(Color.WHITE)
         key = intent.getStringExtra("media_key")
         startPosition = intent.getIntExtra("position", 0)
-        imageList = MediaHub.get(key!!) ?: emptyList()
-        window.navigationBarColor = Color.parseColor("#000000")
+        imageList = MediaHub.get(key!!) as MutableList<MediaFile>
+        window.navigationBarColor = "#000000".toColorInt()
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        window.statusBarColor = Color.parseColor("#000000")
+        window.statusBarColor = "#000000".toColorInt()
         val currentPosition = binding.viewPager.currentItem
         supportActionBar!!.title = getImageDate(applicationContext, imageList[currentPosition].uri.toUri()) ?: imageList[startPosition].name
         supportActionBar!!.subtitle = getImageTime(applicationContext, imageList[currentPosition].uri.toUri()) ?: ""
@@ -55,10 +59,10 @@ class ViewActivity: AppCompatActivity() {
                 supportActionBar!!.subtitle = getImageTime(applicationContext, imageList[pos].uri.toUri()) ?: ""
             }
         })
-        val adapter = ImagePagerAdapter(this@ViewActivity, imageList){toggleUIVisibility()}
+        adapter = ImagePagerAdapter(this@ViewActivity, imageList){toggleUIVisibility()}
         binding.viewPager.adapter = adapter
         binding.viewPager.setCurrentItem(startPosition, false)
-        val filmstripAdapter: FilmstripAdapter = FilmstripAdapter(imageList){ position ->
+        filmstripAdapter = FilmstripAdapter(imageList){ position ->
             binding.viewPager.setCurrentItem(position, true)
         }
         binding.filmStripRecyclerView.layoutManager = LinearLayoutManager(this@ViewActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -81,23 +85,23 @@ class ViewActivity: AppCompatActivity() {
             when (item.itemId) {
                 R.id.share -> {
                     val currentPosition = binding.viewPager.currentItem
-                    val currentUri = Uri.parse(imageList[currentPosition].uri)
+                    val currentUri = imageList[currentPosition].uri.toUri()
                     shareImage(this, currentUri)
                     true
                 }
                 R.id.edit -> {
                     val pos = binding.viewPager.currentItem
-                    editImage(this, Uri.parse(imageList[pos].uri))
+                    editImage(this, imageList[pos].uri.toUri())
                     true
                 }
                 R.id.delete ->{
                     val pos = binding.viewPager.currentItem
-                    deleteImageFromUri(this, Uri.parse(imageList[pos].uri))
+                    deleteImageFromUri(this, imageList[pos].uri.toUri(), pos)
                     true
                 }
                 R.id.info ->{
                     val pos = binding.viewPager.currentItem
-                    showImageInfoDialog(this, Uri.parse(imageList[pos].uri))
+                    showImageInfoDialog(this, imageList[pos].uri.toUri())
                     true
                 }
                 else -> false
@@ -105,14 +109,26 @@ class ViewActivity: AppCompatActivity() {
         }
     }
 
-    fun deleteImageFromUri(context: Context, imageUri: Uri): Boolean {
+    fun deleteImageFromUri(context: Context, imageUri: Uri, pos: Int): Boolean {
         return try {
             val contentResolver: ContentResolver = context.contentResolver
             val rowsDeleted = contentResolver.delete(imageUri, null, null)
-            rowsDeleted > 0
+
+            if (rowsDeleted > 0) {
+                imageList.removeAt(pos)
+                filmstripAdapter.notifyItemRemoved(pos)
+                adapter.notifyItemRemoved(pos)
+                val nextIndex = if (pos < imageList.size) pos else imageList.lastIndex
+                binding.viewPager.setCurrentItem(nextIndex, false)
+                true
+            } else {
+                false
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(context, "Please Allow All files access permission first", Toast.LENGTH_SHORT).show()
+            val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+            context.startActivity(intent)
             false
         }
     }
