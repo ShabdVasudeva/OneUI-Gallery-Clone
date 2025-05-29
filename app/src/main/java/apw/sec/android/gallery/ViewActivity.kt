@@ -15,6 +15,7 @@ import android.provider.MediaStore
 import android.content.*
 import android.content.res.ColorStateList
 import android.os.Build
+import android.preference.PreferenceManager
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
@@ -43,6 +44,13 @@ class ViewActivity: AppCompatActivity() {
         binding.toolbar.setTitleTextColor(Color.WHITE)
         binding.toolbar.setNavigationIconTint(Color.WHITE)
         key = intent.getStringExtra("media_key")
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val isEnabled = sharedPreferences.getBoolean("ENABLE_FILMSTRIP", true)
+        if (isEnabled){
+            binding.filmStripRecyclerView.visibility = View.VISIBLE
+        } else{
+            binding.filmStripRecyclerView.visibility = View.GONE
+        }
         startPosition = intent.getIntExtra("position", 0)
         imageList = MediaHub.get(key!!) as MutableList<MediaFile>
         window.navigationBarColor = "#000000".toColorInt()
@@ -95,8 +103,17 @@ class ViewActivity: AppCompatActivity() {
                     true
                 }
                 R.id.delete ->{
-                    val pos = binding.viewPager.currentItem
-                    deleteImageFromUri(this, imageList[pos].uri.toUri(), pos)
+                    var builder = AlertDialog.Builder(this@ViewActivity)
+                    builder.setTitle("Delete this photo?")
+                    builder.setMessage("This photo will be deleted from this device.\nAlso can not be acessed or restored from gallery.")
+                    builder.setNegativeButton("Cancel", null)
+                    builder.setPositiveButton("Delete", object : DialogInterface.OnClickListener{
+                        override fun onClick(p0: DialogInterface?, p1: Int) {
+                            val pos = binding.viewPager.currentItem
+                            deleteImageFromUri(this@ViewActivity, imageList[pos].uri.toUri(), pos)
+                        }
+                    })
+                    builder.show()
                     true
                 }
                 R.id.info ->{
@@ -118,8 +135,20 @@ class ViewActivity: AppCompatActivity() {
                 imageList.removeAt(pos)
                 filmstripAdapter.notifyItemRemoved(pos)
                 adapter.notifyItemRemoved(pos)
-                val nextIndex = if (pos < imageList.size) pos else imageList.lastIndex
-                binding.viewPager.setCurrentItem(nextIndex, false)
+                if (imageList.isEmpty()){
+                    setResult(RESULT_OK, Intent().apply {
+                        putExtra("deleted_position", pos)
+                        putExtra("media_key", key)
+                    })
+                    finish()
+                } else{
+                    setResult(RESULT_OK, Intent().apply {
+                        putExtra("deleted_position", pos)
+                        putExtra("media_key", key)
+                    })
+                    val nextIndex = if (pos < imageList.size) pos else imageList.lastIndex
+                    binding.viewPager.setCurrentItem(nextIndex, false)
+                }
                 true
             } else {
                 false
@@ -230,9 +259,11 @@ class ViewActivity: AppCompatActivity() {
         if (isUIVisible) {
             binding.toolbar.visibility = View.GONE
             binding.bottomBar.visibility = View.GONE
+            binding.filmStripRecyclerView.visibility = View.GONE
         } else {
             binding.toolbar.visibility = View.VISIBLE
             binding.bottomBar.visibility = View.VISIBLE
+            binding.filmStripRecyclerView.visibility = View.VISIBLE
         }
         isUIVisible = !isUIVisible
     }

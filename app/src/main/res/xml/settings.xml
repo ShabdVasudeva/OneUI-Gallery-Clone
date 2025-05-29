@@ -1,7 +1,7 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.preference.PreferenceCategory
         android:key="cat4"
-        android:title="Quotes">
+        android:title="General">
         <ListPreference
             android:key="font_preference"
             android:title="Choose Font"
@@ -9,6 +9,11 @@
             android:entries="@array/font_names"
             android:entryValues="@array/font_values"
             android:defaultValue="Roboto Slab" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="ENABLE_FILMSTRIP"
+            android:title="Filmstrip"
+            android:defaultValue="true"
+            android:summary="Enable filmstrip in image viewer for easy access of images."/>
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
         android:key="cat3"

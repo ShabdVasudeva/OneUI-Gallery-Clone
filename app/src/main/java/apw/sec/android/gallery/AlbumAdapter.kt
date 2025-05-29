@@ -5,19 +5,24 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import apw.sec.android.gallery.components.AlbumImage
+import androidx.core.net.toUri
+import dev.oneuiproject.oneui.widget.Toast
 
 class AlbumAdapter(
     private val context: Context,
-    private val mediaFiles: List<MediaFile>
+    private val mediaFiles: MutableList<MediaFile>
 ) : RecyclerView.Adapter<AlbumAdapter.MediaViewHolder>() {
 
-    private val albumMap: Map<String, List<MediaFile>> = mediaFiles.groupBy { it.folderName ?: "Unknown" }
+    private val albumMap: Map<String, MutableList<MediaFile>> =
+        mediaFiles.groupBy { it.folderName ?: "Unknown" } as Map<String, MutableList<MediaFile>>
     private val albumList = albumMap.keys.toList()
+    private var pos: Int? = null
 
     inner class MediaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: AlbumImage = view.findViewById(R.id.imageView)
@@ -27,15 +32,67 @@ class AlbumAdapter(
         init {
             view.setOnClickListener {
                 val folderName = albumList[adapterPosition]
+                pos = adapterPosition
                 val folderMediaList = albumMap[folderName] ?: emptyList()
                 val intent = Intent(context, AlbumViewer::class.java).apply {
                     putExtra("folderName", folderName)
                 }
                 context.startActivity(intent)
             }
+            view.setOnLongClickListener {
+                val folderName = albumList[adapterPosition]
+                showPopUpMenu(view, folderName)
+                true
+            }
         }
     }
 
+    fun showPopUpMenu(view: View, folderName: String){
+        val popupMenu = PopupMenu(context, view)
+        popupMenu.menuInflater.inflate(R.menu.album_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.menu_delete ->{
+                    deleteAlbum(folderName)
+                    true
+                }
+                R.id.menu_move ->{
+                    /* moveAlbum(folderName) */
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
+    }
+
+    private fun deleteAlbum(folderName: String) {
+        val files = albumMap[folderName] ?: return
+        val resolver = context.contentResolver
+
+        var deletedCount = 0
+
+        for (file in files) {
+            try {
+                val uri = file.uri.toUri()
+                val rows = resolver.delete(uri, null, null)
+                if (rows > 0) deletedCount++
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        Toast.makeText(context, "$deletedCount file(s) deleted from \"$folderName\"", Toast.LENGTH_SHORT).show()
+
+        val fragmentManager = (context as? AppCompatActivity)?.supportFragmentManager
+        val currentfragment = fragmentManager?.findFragmentById(R.id.placeholder)
+        currentfragment?.let {
+            fragmentManager.beginTransaction().detach(it).attach(it).commit()
+        }
+
+        mediaFiles.removeAll { it.folderName == folderName }
+        notifyDataSetChanged()
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {

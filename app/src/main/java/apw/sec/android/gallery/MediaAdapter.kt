@@ -1,7 +1,6 @@
 package apw.sec.android.gallery
 
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import apw.sec.android.gallery.components.Image
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import apw.sec.android.gallery.R
 import apw.sec.android.gallery.data.MediaHub
 import java.util.UUID
 
 class MediaAdapter(
-    private val mediaFiles: List<MediaFile>
+    private val mediaFiles: MutableList<MediaFile>
 ) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
 
     inner class MediaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -24,10 +22,9 @@ class MediaAdapter(
         init {
             view.setOnClickListener {
                 val key: String = UUID.randomUUID().toString()
-                MediaHub.save(key, mediaFiles.toMutableList())
+                MediaHub.save(key, mediaFiles)
                 val context = itemView.context
                 val intent = Intent(context, ViewActivity::class.java).apply {
-                    // putExtra("imageList", ArrayList(mediaFiles))
                     putExtra("media_key", key)
                     putExtra("position", adapterPosition)
                 }

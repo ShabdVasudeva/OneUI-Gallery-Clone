@@ -1,28 +1,23 @@
 package apw.sec.android.gallery
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.*
 import android.widget.*
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import android.view.*
-import androidx.lifecycle.*
 import androidx.preference.*
 import android.util.Log
 import android.graphics.*
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import android.content.Intent
-import com.google.android.material.dialog.*
 import apw.sec.android.gallery.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
@@ -113,13 +108,24 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
     companion object {
         class MainFrag : Fragment() {
 
-            private var mediaList: List<MediaFile>? = null
+            private lateinit var mediaList: MutableList<MediaFile>
             private lateinit var adapter: MediaAdapter
             override fun onCreateView(
                 inflater: LayoutInflater, container: ViewGroup?,
                 savedInstanceState: Bundle?
             ): View? {
                 return inflater.inflate(R.layout.fragment_main, container, false)
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onResume() {
+                super.onResume()
+                requireActivity().intent.getIntExtra("deleted_position", -1).takeIf { it != -1 }?.let { pos ->
+                    mediaList.removeAt(pos)
+                    adapter.notifyItemRemoved(pos)
+                    adapter.notifyDataSetChanged()
+                    requireActivity().intent.removeExtra("deleted_position")
+                }
             }
 
             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -132,8 +138,8 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
 
             private fun loadImages() {
                 val mediaFetcher = MediaFetcher(requireContext())
-                mediaList = mediaFetcher.fetchMediaFiles()
-                adapter = MediaAdapter(mediaList!!)
+                mediaList = mediaFetcher.fetchMediaFiles().toMutableList()
+                adapter = MediaAdapter(mediaList)
             }
         }
         
@@ -173,7 +179,7 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
         
         class Album: Fragment(){
             
-            private var mediaList: List<MediaFile>? = null
+            private lateinit var mediaList: MutableList<MediaFile>
             private lateinit var adapter: AlbumAdapter
 
             override fun onCreateView(
@@ -193,8 +199,8 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
 
             private fun loadImages() {
                 val mediaFetcher = Albums(requireContext())
-                mediaList = mediaFetcher.fetchAlbums()
-                adapter = AlbumAdapter(requireContext(), mediaList!!)
+                mediaList = mediaFetcher.fetchAlbums().toMutableList()
+                adapter = AlbumAdapter(requireContext(), mediaList)
             }
         }
         

@@ -11,7 +11,7 @@ class AlbumViewer: AppCompatActivity(){
     
     private var _binding: LayoutAlbumViewerBinding? = null
     private val binding get() = _binding!!
-    private var mediaFiles: List<MediaFile> = listOf()
+    private lateinit var mediaFiles: MutableList<MediaFile>
     private lateinit var adapter: MediaAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
@@ -20,11 +20,11 @@ class AlbumViewer: AppCompatActivity(){
         val folderName: String? = intent.getStringExtra("folderName")
         binding.toolbar.setNavigationButtonAsBack()
         binding.toolbar.setTitle(folderName)
-        mediaFiles = fetchMediaFilesFromFolder(folderName!!)
+        mediaFiles = fetchMediaFilesFromFolder(folderName!!).toMutableList()
         setupRecyclerView(mediaFiles, folderName)
     }
 
-    fun setupRecyclerView(mediaFiles: List<MediaFile>, folderName: String?){
+    fun setupRecyclerView(mediaFiles: MutableList<MediaFile>, folderName: String?){
         getSupportActionBar()!!.title = folderName
         Log.e("AlbumError",mediaFiles.size.toString())
         adapter = MediaAdapter(mediaFiles)
