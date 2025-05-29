@@ -95,7 +95,7 @@ class AlbumAdapter(
     }
 
     private fun moveAlbum(folderName: String) {
-        val groupAlbums = albumList.filter { it != folderName }
+        val groupAlbums = albumMap.keys.filter { it != folderName }
         if (groupAlbums.isEmpty()) {
             Toast.makeText(context, "No group albums available", Toast.LENGTH_SHORT).show()
             return
@@ -110,10 +110,13 @@ class AlbumAdapter(
         }
         popupMenu.setOnMenuItemClickListener { menuItem ->
             val targetGroup = groupAlbums[menuItem.itemId]
-            val filesToMove = albumMap[folderName] ?: return@setOnMenuItemClickListener false
-            filesToMove.forEach { it.folderName = targetGroup }
-            mediaFiles.removeAll { it.folderName == folderName }
-            mediaFiles.addAll(filesToMove)
+            val filesToMove = albumMap[folderName]?.toList() ?: return@setOnMenuItemClickListener false
+            albumMap[targetGroup]?.addAll(filesToMove)
+            albumMap[folderName]?.clear()
+            mediaFiles.removeAll(elements = filesToMove)
+            mediaFiles.addAll( filesToMove.map { transformedFile ->
+                transformedFile.copy(folderName = targetGroup)
+            })
             notifyDataSetChanged()
             Toast.makeText(context, "Album \"$folderName\" moved to \"$targetGroup\"", Toast.LENGTH_SHORT).show()
             true
