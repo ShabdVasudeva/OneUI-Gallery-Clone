@@ -17,12 +17,12 @@ class AboutActivity: AppCompatActivity(){
         _binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.aboutSourceCode.setOnClickListener{
-            val intent: Intent = Intent(
-                Intent.ACTION_VIEW,
-                "https://github.com/ShabdVasudeva/OneUI-Gallery-Clone".toUri()
-            ).apply {
-                startActivity(this)
-            }
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    "https://github.com/ShabdVasudeva/OneUI-Gallery-Clone".toUri()
+                )
+            )
             binding.appInfoLayout.status = AppInfoLayout.NO_UPDATE
         }
     }

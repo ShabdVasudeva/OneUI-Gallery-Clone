@@ -15,7 +15,6 @@ import android.provider.MediaStore
 import android.content.*
 import android.content.res.ColorStateList
 import android.os.Build
-import android.preference.PreferenceManager
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
@@ -44,7 +43,7 @@ class ViewActivity: AppCompatActivity() {
         binding.toolbar.setTitleTextColor(Color.WHITE)
         binding.toolbar.setNavigationIconTint(Color.WHITE)
         key = intent.getStringExtra("media_key")
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val sharedPreferences = getSharedPreferences("apw_gallery_preferences", Context.MODE_PRIVATE)
         val isEnabled = sharedPreferences.getBoolean("ENABLE_FILMSTRIP", true)
         if (isEnabled){
             binding.filmStripRecyclerView.visibility = View.VISIBLE
@@ -54,6 +53,7 @@ class ViewActivity: AppCompatActivity() {
         startPosition = intent.getIntExtra("position", 0)
         imageList = MediaHub.get(key!!) as MutableList<MediaFile>
         window.navigationBarColor = "#000000".toColorInt()
+        @Suppress("DEPRECATION")
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         window.statusBarColor = "#000000".toColorInt()
         val currentPosition = binding.viewPager.currentItem
@@ -92,8 +92,8 @@ class ViewActivity: AppCompatActivity() {
         binding.bottomBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.share -> {
-                    val currentPosition = binding.viewPager.currentItem
-                    val currentUri = imageList[currentPosition].uri.toUri()
+                    val current = binding.viewPager.currentItem
+                    val currentUri = imageList[current].uri.toUri()
                     shareImage(this, currentUri)
                     true
                 }

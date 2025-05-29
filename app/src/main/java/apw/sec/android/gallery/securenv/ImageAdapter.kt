@@ -27,7 +27,7 @@ class ImageAdapter(
                 val intent = Intent(context, PrivateImageViewer::class.java).apply {
                     putExtra("media_key", key)
                     putParcelableArrayListExtra("mediaList", ArrayList(imageList))
-                    putExtra("position", adapterPosition)
+                    putExtra("position", bindingAdapterPosition)
                 }
                 context.startActivity(intent)
             }

@@ -26,7 +26,7 @@ class MediaAdapter(
                 val context = itemView.context
                 val intent = Intent(context, ViewActivity::class.java).apply {
                     putExtra("media_key", key)
-                    putExtra("position", adapterPosition)
+                    putExtra("position",bindingAdapterPosition)
                 }
                 context.startActivity(intent)
             }

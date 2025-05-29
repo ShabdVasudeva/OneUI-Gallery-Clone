@@ -49,6 +49,7 @@ class GenerateQuoteImage {
                 .setIncludePad(true)
                 .build()
         } else {
+            @Suppress("DEPRECATION")
             StaticLayout(quoteText, paintText, textWidth, Layout.Alignment.ALIGN_CENTER, 1.2f, 1.2f, true)
         }
         val textX = width / 2.2f

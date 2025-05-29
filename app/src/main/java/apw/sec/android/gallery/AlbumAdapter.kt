@@ -20,7 +20,8 @@ class AlbumAdapter(
 ) : RecyclerView.Adapter<AlbumAdapter.MediaViewHolder>() {
 
     private val albumMap: Map<String, MutableList<MediaFile>> =
-        mediaFiles.groupBy { it.folderName ?: "Unknown" } as Map<String, MutableList<MediaFile>>
+        mediaFiles.groupBy { it.folderName ?: "Unknown" }
+            .mapValues { it.value.toMutableList() }
     private val albumList = albumMap.keys.toList()
     private var pos: Int? = null
 
@@ -31,16 +32,15 @@ class AlbumAdapter(
 
         init {
             view.setOnClickListener {
-                val folderName = albumList[adapterPosition]
-                pos = adapterPosition
-                val folderMediaList = albumMap[folderName] ?: emptyList()
+                val folderName = albumList[bindingAdapterPosition]
+                pos = bindingAdapterPosition
                 val intent = Intent(context, AlbumViewer::class.java).apply {
                     putExtra("folderName", folderName)
                 }
                 context.startActivity(intent)
             }
             view.setOnLongClickListener {
-                val folderName = albumList[adapterPosition]
+                val folderName = albumList[bindingAdapterPosition]
                 showPopUpMenu(view, folderName)
                 true
             }
@@ -57,7 +57,7 @@ class AlbumAdapter(
                     true
                 }
                 R.id.menu_move ->{
-                    /* moveAlbum(folderName) */
+                    moveAlbum(folderName)
                     true
                 }
                 else -> false
@@ -92,6 +92,33 @@ class AlbumAdapter(
 
         mediaFiles.removeAll { it.folderName == folderName }
         notifyDataSetChanged()
+    }
+
+    private fun moveAlbum(folderName: String) {
+        val groupAlbums = albumList.filter { it != folderName }
+        if (groupAlbums.isEmpty()) {
+            Toast.makeText(context, "No group albums available", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val anchorView = (context as? AppCompatActivity)?.window?.decorView?.findViewById<View>(android.R.id.content)
+            ?: return
+
+        val popupMenu = PopupMenu(context, anchorView)
+        groupAlbums.forEachIndexed { index, groupName ->
+            popupMenu.menu.add(0, index, 0, groupName)
+        }
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            val targetGroup = groupAlbums[menuItem.itemId]
+            val filesToMove = albumMap[folderName] ?: return@setOnMenuItemClickListener false
+            filesToMove.forEach { it.folderName = targetGroup }
+            mediaFiles.removeAll { it.folderName == folderName }
+            mediaFiles.addAll(filesToMove)
+            notifyDataSetChanged()
+            Toast.makeText(context, "Album \"$folderName\" moved to \"$targetGroup\"", Toast.LENGTH_SHORT).show()
+            true
+        }
+        popupMenu.show()
     }
 
 

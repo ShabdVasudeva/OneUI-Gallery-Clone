@@ -63,6 +63,7 @@ object ImageUtils {
                 }
             }
             val uri = Uri.fromFile(destinationFile)
+            @Suppress("DEPRECATION")
             context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
             destinationFile.absolutePath
         } catch (e: IOException) {

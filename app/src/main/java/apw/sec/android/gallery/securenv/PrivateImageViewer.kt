@@ -52,6 +52,7 @@ class PrivateImageViewer: AppCompatActivity(){
         database = PrivateSafeDatabase(this)
         window.navigationBarColor = Color.parseColor("#000000")
         window.statusBarColor = Color.parseColor("#000000")
+        @Suppress("DEPRECATION")
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         key = intent.getStringExtra("media_key")
         imageList = PrivateMediaHub.get(key!!)!!

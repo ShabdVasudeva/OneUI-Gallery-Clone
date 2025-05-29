@@ -213,11 +213,11 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener{
                 setPreferencesFromResource(R.xml.preferences, rootKey)
                 val ai: Preference? = findPreference("safe")
                 val quote: Preference? = findPreference("quotes")
-                ai?.setOnPreferenceClickListener{pref ->
+                ai?.setOnPreferenceClickListener{ _ ->
                     startActivity(Intent(requireContext(), PrivateSafe::class.java))
                     true
                 }
-                quote?.setOnPreferenceClickListener{pref ->
+                quote?.setOnPreferenceClickListener{ _ ->
                     ColorPickerDialog.newBuilder()
                         .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
                         .setAllowPresets(false)

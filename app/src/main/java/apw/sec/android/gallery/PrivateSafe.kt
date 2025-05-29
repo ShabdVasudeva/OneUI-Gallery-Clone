@@ -43,7 +43,7 @@ class PrivateSafe: AppCompatActivity() {
         )
         database = PrivateSafeDatabase(this@PrivateSafe)
         val images = database.getAllImagePaths()
-        val adapter = ImageAdapter(images){image ->
+        val adapter = ImageAdapter(images){ _ ->
             
         }
         binding.recyclerView.layoutManager = GridLayoutManager(this@PrivateSafe, 4)
@@ -51,10 +51,12 @@ class PrivateSafe: AppCompatActivity() {
         binding.add.setOnClickListener{
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
+            @Suppress("DEPRECATION")
             startActivityForResult(intent, REQUEST_IMAGE)
         }
     }
 
+    @Suppress("DEPRECATION")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun authenticateWithKeyguard() {
         val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
@@ -114,7 +116,7 @@ class PrivateSafe: AppCompatActivity() {
     
     private fun loadImages(){
         val images = database.getAllImagePaths()
-        val adapter = ImageAdapter(images){image ->
+        val adapter = ImageAdapter(images){ _ ->
             
         }
         binding.recyclerView.layoutManager = GridLayoutManager(this@PrivateSafe, 4)
