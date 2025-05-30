@@ -14,6 +14,12 @@
             android:title="Filmstrip"
             android:defaultValue="true"
             android:summary="Enable filmstrip in image viewer for easy access of images."/>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="HIDE_FILMSTRIP"
+            android:title="Hide Filmstrip"
+            android:defaultValue="true"
+            android:summary="Hide the filmstrip along other items on click of media."
+            android:enabled="false" />
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
         android:key="cat3"

@@ -256,14 +256,23 @@ class ViewActivity: AppCompatActivity() {
     }
     
     private fun toggleUIVisibility() {
+        val sharedPreferences = getSharedPreferences("apw_gallery_prefs", Context.MODE_PRIVATE)
         if (isUIVisible) {
             binding.toolbar.visibility = View.GONE
             binding.bottomBar.visibility = View.GONE
-            binding.filmStripRecyclerView.visibility = View.GONE
+            if (sharedPreferences.getBoolean("HIDE_FILMSTRIP", true)) {
+                binding.filmStripRecyclerView.visibility = View.GONE
+            } else {
+                binding.filmStripRecyclerView.visibility = View.VISIBLE
+            }
         } else {
             binding.toolbar.visibility = View.VISIBLE
             binding.bottomBar.visibility = View.VISIBLE
-            binding.filmStripRecyclerView.visibility = View.VISIBLE
+            if (sharedPreferences.getBoolean("HIDE_FILMSTRIP", true)) {
+                binding.filmStripRecyclerView.visibility = View.GONE
+            } else {
+                binding.filmStripRecyclerView.visibility = View.VISIBLE
+            }
         }
         isUIVisible = !isUIVisible
     }

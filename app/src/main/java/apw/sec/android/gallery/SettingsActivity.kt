@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import apw.sec.android.gallery.databinding.ActivitySettingsBinding
 import android.app.*
 
@@ -25,6 +26,11 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.setNavigationButtonAsBack()    
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     class SettingsFrag : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.settings, rootKey)
@@ -32,6 +38,9 @@ class SettingsActivity : AppCompatActivity() {
             val pref1 = findPreference<Preference>("pvt")
             val pref2 = findPreference<Preference>("about")
             val pref3 = findPreference<Preference>("app_info")
+            val switchPref = findPreference<SwitchPreferenceCompat>("HIDE_FILMSTRIP")
+            val switchPref2 = findPreference<SwitchPreferenceCompat>("ENABLE_FILMSTRIP")
+            val sharedPreferences = requireActivity().getSharedPreferences("apw_gallery_prefs", AppCompatActivity.MODE_PRIVATE)
             
             pref2?.setOnPreferenceClickListener {
                 activity?.startActivity(
@@ -70,11 +79,16 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 true
             }
-        }
-    }
+            // Get the value from sharedPreferences to control switchPref's enabled state
+            val isHideFilmstripEnabled = sharedPreferences.getBoolean("ENABLE_FILMSTRIP", true)
+            switchPref?.isEnabled = isHideFilmstripEnabled
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+            // Listen for changes to the sharedPreference value and update enabled state accordingly
+            switchPref2?.setOnPreferenceChangeListener { _, newValue ->
+                val isEnabled = newValue as Boolean
+                switchPref?.isEnabled = isEnabled
+                true
+            }
+        }
     }
 }
