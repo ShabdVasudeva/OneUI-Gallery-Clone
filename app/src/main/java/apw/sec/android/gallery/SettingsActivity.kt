@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
@@ -38,8 +39,6 @@ class SettingsActivity : AppCompatActivity() {
             val pref1 = findPreference<Preference>("pvt")
             val pref2 = findPreference<Preference>("about")
             val pref3 = findPreference<Preference>("app_info")
-            val switchPref = findPreference<SwitchPreferenceCompat>("HIDE_FILMSTRIP")
-            val switchPref2 = findPreference<SwitchPreferenceCompat>("ENABLE_FILMSTRIP")
             val sharedPreferences = requireActivity().getSharedPreferences("apw_gallery_prefs", AppCompatActivity.MODE_PRIVATE)
             
             pref2?.setOnPreferenceClickListener {
@@ -77,16 +76,6 @@ class SettingsActivity : AppCompatActivity() {
                         }
                         .show()
                 }
-                true
-            }
-            // Get the value from sharedPreferences to control switchPref's enabled state
-            val isHideFilmstripEnabled = sharedPreferences.getBoolean("ENABLE_FILMSTRIP", true)
-            switchPref?.isEnabled = isHideFilmstripEnabled
-
-            // Listen for changes to the sharedPreference value and update enabled state accordingly
-            switchPref2?.setOnPreferenceChangeListener { _, newValue ->
-                val isEnabled = newValue as Boolean
-                switchPref?.isEnabled = isEnabled
                 true
             }
         }

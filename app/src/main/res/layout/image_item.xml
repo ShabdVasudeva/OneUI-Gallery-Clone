@@ -22,4 +22,16 @@
         android:visibility="gone"
         android:layout_gravity="center|center" />
 
+    <TextView
+        android:id="@+id/blurIndicator"
+        android:layout_gravity="bottom|end"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="@color/oui_btn_text_color"
+        android:background="@drawable/rounded_background"
+        android:textSize="@dimen/oui_n_badge_text_size"
+        android:visibility="gone"
+        android:text="Blurry"
+        android:layout_margin="12dp"/>
+
 </FrameLayout>

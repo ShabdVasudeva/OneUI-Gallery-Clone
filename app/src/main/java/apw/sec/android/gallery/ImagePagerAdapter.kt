@@ -6,7 +6,10 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.provider.MediaStore
+import android.graphics.Bitmap
 import androidx.recyclerview.widget.RecyclerView
+import androidx.core.net.toUri
 import apw.sec.android.gallery.databinding.ItemImageViewerBinding
 import com.bumptech.glide.Glide
 
