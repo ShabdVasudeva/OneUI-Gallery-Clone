@@ -358,7 +358,9 @@ class ViewActivity : AppCompatActivity() {
     }
 
     private fun toggleUIVisibility() {
-        val sharedPreferences = getSharedPreferences("apw_gallery_prefs", Context.MODE_PRIVATE)
+ val sharedPreferences =
+ getSharedPreferences("apw_gallery_preferences", Context.MODE_PRIVATE)
+ val isFilmstripEnabled = sharedPreferences.getBoolean("ENABLE_FILMSTRIP", true)
         if (isUIVisible) {
             binding.toolbar.visibility = View.GONE
             binding.bottomBar.visibility = View.GONE
@@ -366,7 +368,9 @@ class ViewActivity : AppCompatActivity() {
         } else {
             binding.toolbar.visibility = View.VISIBLE
             binding.bottomBar.visibility = View.VISIBLE
+ if (isFilmstripEnabled) {
             binding.filmStripRecyclerView.visibility = View.VISIBLE
+ }
         }
         isUIVisible = !isUIVisible
     }
@@ -392,7 +396,6 @@ class ViewActivity : AppCompatActivity() {
         binding.viewPager.setCurrentItem(currentItem - 1, true)  // Animate to previous item
         binding.viewPager.postDelayed({
             finish()
-            overridePendingTransition(R.anim.slide_out_up, R.anim.slide_in_down)
         }, 200) // Delay finish slightly to show animation
     }
 }

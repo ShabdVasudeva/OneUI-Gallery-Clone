@@ -39,8 +39,14 @@ class SettingsActivity : AppCompatActivity() {
             val pref1 = findPreference<Preference>("pvt")
             val pref2 = findPreference<Preference>("about")
             val pref3 = findPreference<Preference>("app_info")
-            val sharedPreferences = requireActivity().getSharedPreferences("apw_gallery_prefs", AppCompatActivity.MODE_PRIVATE)
-            
+            val pref4 = findPreference<SwitchPreferenceCompat>("ENABLE_FILMSTRIP")
+
+            pref4?.setOnPreferenceChangeListener { _, newValue ->
+                val editor = activity?.getSharedPreferences("apw_gallery_preferences", 0)?.edit()
+                editor?.putBoolean("ENABLE_FILMSTRIP", newValue as Boolean)
+                editor?.apply()
+                true
+            }
             pref2?.setOnPreferenceClickListener {
                 activity?.startActivity(
                     Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/AndroidPortWorldDiscussion"))
