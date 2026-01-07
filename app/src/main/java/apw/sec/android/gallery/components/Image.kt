@@ -13,7 +13,7 @@ class Image @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ): ImageView(context, attrs, defStyleAttr){
-    private var cornerRadius: Float = 20f
+    private var cornerRadius: Float = 0f  //20f old value
     private val path = Path()
     init{
         attrs?.let { 
