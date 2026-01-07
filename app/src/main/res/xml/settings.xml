@@ -1,7 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- General Settings -->
     <androidx.preference.PreferenceCategory
-        android:key="cat4"
+        android:key="cat_general"
         android:title="General">
+
         <ListPreference
             android:key="font_preference"
             android:title="Choose Font"
@@ -9,38 +13,84 @@
             android:entries="@array/font_names"
             android:entryValues="@array/font_values"
             android:defaultValue="Roboto Slab" />
+    </androidx.preference.PreferenceCategory>
+
+    <!-- UI Changes Category -->
+    <androidx.preference.PreferenceCategory
+        android:key="cat_ui_changes"
+        android:title="UI Changes">
+
         <androidx.preference.SwitchPreferenceCompat
             android:key="ENABLE_FILMSTRIP"
             android:title="Filmstrip"
             android:defaultValue="true"
-            android:summary="Enable filmstrip in image viewer for easy access of images."/>
+            android:summary="Enable filmstrip in image viewer for easy access of images." />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="SHOW_ESSENTIAL_ALBUMS"
+            android:title="Show Essential Albums"
+            android:defaultValue="false"
+            android:summary="Show only the albums you select on the Albums Tab instead of showing them all." />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="ENABLE_FLOATING_TAB_BAR"
+            android:title="Floating Tab Bar"
+            android:defaultValue="true"
+            android:summary="Enable the new floating-style tab bar at the bottom." />
     </androidx.preference.PreferenceCategory>
+
+    <!-- Groups -->
     <androidx.preference.PreferenceCategory
-        android:key="cat3"
+        android:key="cat_groups"
+        android:title="Groups">
+
+        <androidx.preference.Preference
+            android:key="Import"
+            android:title="Import"
+            android:summary="Restore your album groups from a backup file" />
+
+        <androidx.preference.Preference
+            android:key="Export"
+            android:title="Export"
+            android:summary="Save your album groups to backup and restore later" />
+    </androidx.preference.PreferenceCategory>
+
+    <!-- Private Safe -->
+    <androidx.preference.PreferenceCategory
+        android:key="cat_private_safe"
         android:title="Private safe">
+
         <androidx.preference.Preference
             android:key="pvt"
             android:title="Private Safe" />
+
         <androidx.preference.SwitchPreferenceCompat
             android:key="DELETE_AFTER_SAVE"
             android:defaultValue="false"
             android:title="Delete"
             android:summary="Delete the original image after saving it into private safe." />
     </androidx.preference.PreferenceCategory>
+
+    <!-- Developer Info -->
     <androidx.preference.PreferenceCategory
-        android:key="cat1"
+        android:key="cat_developer_info"
         android:title="Developer Info">
+
         <androidx.preference.Preference
             android:key="about"
             android:title="About us"
-            android:summary="information about our team and platform" />
+            android:summary="Information about our team and platform" />
     </androidx.preference.PreferenceCategory>
+
+    <!-- Application Info -->
     <androidx.preference.PreferenceCategory
-        android:key="cat2"
+        android:key="cat_app_info"
         android:title="Application Info">
+
         <androidx.preference.Preference
             android:key="app_info"
             android:title="About App"
             android:summary="Build 15.0.1 By @AndroidPortWorld" />
     </androidx.preference.PreferenceCategory>
+
 </androidx.preference.PreferenceScreen>
