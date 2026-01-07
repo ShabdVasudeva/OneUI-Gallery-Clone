@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/oui_background_color"
+    android:fitsSystemWindows="true"
+    tools:context=".AllAlbumsActivity"
+    tools:ignore="AppCompatResource">
+
+    <dev.oneuiproject.oneui.layout.ToolbarLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:title="All Albums"
+        app:expanded="false">
+
+        <dev.oneuiproject.oneui.widget.RoundLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/oui_background_color">
+
+            <!-- Selection Toolbar (Hidden by default) -->
+            <LinearLayout
+                android:id="@+id/selectionToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="?attr/colorPrimary"
+                android:visibility="gone"
+                android:paddingHorizontal="8dp">
+
+                <ImageButton
+                    android:id="@+id/btnCancelSelection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_close"
+                    android:contentDescription="Cancel Selection"
+                    android:tint="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/selectionSubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0 selected"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:paddingStart="8dp" />
+
+                <ImageButton
+                    android:id="@+id/btnSelectAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_select_all"
+                    android:contentDescription="Select All"
+                    android:tint="@android:color/white" />
+
+                <ImageButton
+                    android:id="@+id/btnDeleteSelection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_oui_delete"
+                    android:contentDescription="Delete Selected"
+                    android:tint="@android:color/white" />
+
+                <ImageButton
+                    android:id="@+id/btnGroupSelection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_group"
+                    android:contentDescription="Group Selected"
+                    android:tint="@android:color/white" />
+
+            </LinearLayout>
+
+            <!-- RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:clipToPadding="false"
+                android:scrollbars="vertical" />
+
+        </dev.oneuiproject.oneui.widget.RoundLinearLayout>
+    </dev.oneuiproject.oneui.layout.ToolbarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

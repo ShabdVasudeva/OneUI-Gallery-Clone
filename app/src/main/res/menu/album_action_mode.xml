@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AppCompatResource">
+
+    <item
+        android:id="@+id/action_group"
+        android:title="Group"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_move"
+        android:title="Move"
+        android:icon="@drawable/move_album"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_share"
+        android:title="Share"
+        android:icon="@drawable/ic_oui_share_outline"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_delete"
+        android:title="Delete"
+        android:icon="@drawable/ic_oui_delete"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_rename"
+        android:title="Rename"
+        android:icon="@drawable/ic_oui_edit_outline"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_mark"
+        android:title="Remove from Essential albums"
+        android:icon="@drawable/favourite_unselected"
+        app:showAsAction="ifRoom"/>
+
+</menu>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:background="@drawable/image_back"
+    android:layout_margin="4dp">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <!-- FrameLayout wraps image + overlays -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="107dp">
+
+            <!-- Selection overlay -->
+            <View
+                android:id="@+id/selection_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#8000BFFF"
+                android:visibility="gone"/>
+
+            <!-- Album image -->
+            <apw.sec.android.gallery.components.AlbumImage
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <!-- Group cover -->
+            <apw.sec.android.gallery.components.GroupCoverView
+                android:id="@+id/groupCover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:clipToOutline="true" />
+
+            <!-- Dim overlay -->
+            <View
+                android:id="@+id/dim_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/album_dim_overlay"
+                android:visibility="gone" />
+
+
+            <!-- Essential icon -->
+            <ImageView
+                android:id="@+id/essential_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end|top"
+                android:layout_margin="6dp"
+                android:contentDescription="Essential album"
+                android:visibility="gone" />
+
+            <!-- Selection circle -->
+            <FrameLayout
+                android:id="@+id/selection_indicator"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="top|start"
+                android:layout_margin="8dp"
+                android:visibility="gone"
+                android:background="@drawable/album_bg_circle_unselected">
+
+                <ImageView
+                    android:id="@+id/check_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="2.5dp"
+                    android:src="@drawable/album_selected_check"
+                    android:visibility="gone"/>
+            </FrameLayout>
+
+        </FrameLayout>
+
+        <!-- Album title -->
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:paddingStart="4dp"
+            android:gravity="start"
+            android:textColor="@color/album_name" />
+
+        <!-- Album count -->
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:paddingStart="4dp"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            android:visibility="visible"
+            android:gravity="start" />
+    </LinearLayout>
+
+    <!-- Camera icon -->
+    <ImageView
+        android:id="@+id/camera_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="48dp"
+        android:src="@drawable/camera_icon_album"
+        android:visibility="gone" />
+
+</FrameLayout>

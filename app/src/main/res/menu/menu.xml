@@ -5,19 +5,35 @@
     tools:ignore="AppCompatResource">
 
     <item
+        android:id="@+id/select"
+        android:title="Select" />
+
+    <item
+        android:id="@+id/sort"
+        android:name="Sort"
+        android:contentDescription="Sort"
+        android:title="Sort" />
+
+    <item
+        android:id="@+id/esential_albums"
+        android:name="Select essential albums"
+        android:contentDescription="essential_albums"
+        android:title="Select essential albums" />
+
+    <item
         android:id="@+id/settings"
         android:name="Settings"
         android:contentDescription="settings"
         android:title="Settings" />
 
-    <item
-        android:id="@+id/all"
-        android:name="All"
-        android:icon="@drawable/ic_oui_image_outline"
-        android:title="All"
-        app:showAsAction="always"
-        app:iconTint="?actionMenuTextColor"
-        android:visible="true"
-        android:contentDescription="All" />
-    
+<!--    <item-->
+<!--        android:id="@+id/all"-->
+<!--        android:name="All"-->
+<!--        android:icon="@drawable/ic_oui_image_outline"-->
+<!--        android:title="All"-->
+<!--        app:showAsAction="always"-->
+<!--        app:iconTint="?actionMenuTextColor"-->
+<!--        android:visible="true"-->
+<!--        android:contentDescription="All" />-->
+
 </menu>
