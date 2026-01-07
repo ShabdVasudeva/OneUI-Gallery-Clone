@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="back">@color/sesl_action_bar_background_color_light</color>
+    <color name="settings_bg">#F1F1F3</color>
     <color name="fab_back">@color/oui_background_color</color>
+    <color name="album_name">#000000</color>
+    <color name="grey">#808080</color>
+    <color name="bottom_card_color">#FFFFFF</color>
+    <color name="essentialalbums_name_color">#000000</color>"
+    <color name="album_check">#FFFFFF</color>
+    <color name="all_check">#000000</color>
+
 </resources>

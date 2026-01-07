@@ -2,4 +2,9 @@
 <resources>
     <color name="back">@color/sesl_action_bar_background_color_dark</color>
     <color name="fab_back">#3D3D3D</color>
+    <color name="album_name">#FFFFFF</color>"
+    <color name="bottom_card_color">#1A1A1A</color>
+    <color name="essentialalbums_name_color">#FFFFFF</color>"
+    <color name="album_check">#000000</color>
+    <color name="all_check">#FFFFFF</color>
 </resources>
