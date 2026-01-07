@@ -1,43 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="AppCompatResource">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/share"
-        android:icon="@drawable/ic_oui_share_outline"
-        android:title="share"
-        app:showAsAction="always"
-        app:iconTint="?actionMenuTextColor"
-        android:visible="true"
-        android:contentDescription="Share" />
+    <group android:id="@+id/menu_group_main">
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/ic_oui_share_outline"
+            app:showAsAction="always"
+            android:title="Share"
+            app:iconTint="?actionMenuTextColor" />
 
-    <item
-        android:id="@+id/edit"
-        android:icon="@drawable/ic_oui_edit_outline"
-        android:title="edit"
-        app:showAsAction="always"
-        app:iconTint="?actionMenuTextColor"
-        android:visible="true"
-        android:contentDescription="Edit" />
+        <item
+            android:id="@+id/favourite"
+            android:icon="@drawable/favourite_unselected"
+            app:showAsAction="always"
+            android:title="Favourite"
+            app:iconTint="?actionMenuTextColor" />
 
-    <item
-        android:id="@+id/delete"
-        android:icon="@drawable/ic_oui_delete_outline"
-        android:title="delete"
-        app:showAsAction="always"
-        app:iconTint="?actionMenuTextColor"
-        android:visible="true"
-        android:contentDescription="Delete" />
+        <item
+            android:id="@+id/edit"
+            android:icon="@drawable/ic_oui_edit_outline"
+            app:showAsAction="always"
+            android:title="Edit"
+            app:iconTint="?actionMenuTextColor" />
 
-    <item
-        android:id="@+id/info"
-        android:icon="@drawable/ic_oui_info_outline"
-        android:title="info"
-        app:showAsAction="always"
-        app:iconTint="?actionMenuTextColor"
-        android:visible="true"
-        android:contentDescription="Info" />
+        <item
+            android:id="@+id/delete"
+            android:icon="@drawable/ic_oui_delete_outline"
+            app:showAsAction="always"
+            android:title="Delete"
+            app:iconTint="?actionMenuTextColor" />
+
+        <item
+            android:id="@+id/print"
+            android:icon="@drawable/print"
+            app:showAsAction="always"
+            android:title="Print"
+            app:iconTint="?actionMenuTextColor" />
+
+        <item
+            android:id="@+id/rename"
+            android:icon="@drawable/ic_oui_edit_outline"
+            app:showAsAction="always"
+            android:title="Rename"
+            app:iconTint="?actionMenuTextColor" />
+
+        <item
+            android:id="@+id/setaswallpaper"
+            android:icon="@drawable/set_as_wallpaper"
+            app:showAsAction="always"
+            android:title="Set as wallpaper"
+            app:iconTint="?actionMenuTextColor" />
+    </group>
+
+    <group android:id="@+id/menu_group_details">
+        <item
+            android:id="@+id/info"
+            android:icon="@drawable/ic_oui_info_outline"
+            app:showAsAction="always"
+            android:title="Details"
+            app:iconTint="?actionMenuTextColor" />
+    </group>
 
 </menu>

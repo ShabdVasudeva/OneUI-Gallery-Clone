@@ -14,15 +14,17 @@ class FilmstripAdapter(
     private val onItemClick: (Int) -> Unit
 ): RecyclerView.Adapter<FilmstripAdapter.FilmstripViewHolder>(){
 
-    private var  selectedPosition = 0
+    private var selectedPosition = 0
 
     inner class FilmstripViewHolder(val imageView: FilmImageView): RecyclerView.ViewHolder(imageView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmstripViewHolder {
         val imageView = FilmImageView(parent.context).apply{
-            layoutParams = ViewGroup.LayoutParams(110, 150)
+            layoutParams = ViewGroup.MarginLayoutParams(100, 140).apply {
+                // Reduce margin for selected item, increase for others
+                setMargins(4, 4, 4, 4)
+            }
             scaleType = CENTER_CROP
-            setPadding(8, 8, 8, 8)
         }
         return FilmstripViewHolder(imageView)
     }
@@ -31,17 +33,26 @@ class FilmstripAdapter(
         val uri = imageList[position].uri.toUri()
         val requestOptions = RequestOptions().centerCrop()
         Glide.with(holder.imageView.context).load(uri).apply(requestOptions).into(holder.imageView)
+
+        // Update margins based on selection
+        val layoutParams = holder.imageView.layoutParams as ViewGroup.MarginLayoutParams
         if(position == selectedPosition){
-            holder.imageView.scaleX = 1.2f
-            holder.imageView.scaleY = 1.2f
-        } else{
+            holder.imageView.scaleX = 1.15f
+            holder.imageView.scaleY = 1.15f
+            // Less margin for selected item
+            layoutParams.setMargins(4, 4, 4, 4)
+        } else {
             holder.imageView.scaleX = 1.0f
             holder.imageView.scaleY = 1.0f
+            // More margin for non-selected items
+            layoutParams.setMargins(8, 8, 8, 8)
         }
+        holder.imageView.layoutParams = layoutParams
+
         holder.imageView.setOnClickListener{
-            val preview = selectedPosition
+            val previous = selectedPosition
             selectedPosition = position
-            notifyItemChanged(preview)
+            notifyItemChanged(previous)
             notifyItemChanged(position)
             onItemClick(position)
         }
@@ -52,9 +63,9 @@ class FilmstripAdapter(
     }
 
     fun setSelectedPosition(position: Int){
-        val preview = selectedPosition
+        val previous = selectedPosition
         selectedPosition = position
-        notifyItemChanged(preview)
+        notifyItemChanged(previous)
         notifyItemChanged(position)
     }
 }
