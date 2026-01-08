@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- When the item is selected -->
+    <item android:drawable="@drawable/album_selected" android:state_checked="true"/>
+    <!-- When the item is not selected -->
+    <item android:drawable="@drawable/album_unselected" android:state_checked="false"/>
+</selector>

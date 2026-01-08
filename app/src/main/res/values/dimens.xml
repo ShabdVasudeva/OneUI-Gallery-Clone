@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="group_cover_gap">4dp</dimen>
+    <dimen name="album_corner_radius">16dp</dimen>
+    <!-- Floating card dimensions -->
+    <dimen name="floating_card_margin">16dp</dimen>
+    <dimen name="floating_card_radius">32dp</dimen>
+    <dimen name="floating_card_elevation">8dp</dimen>
+    <dimen name="essential_title_offset">24dp</dimen>
+    <dimen name="floating_nav_space">120dp</dimen>
+
+
+</resources>

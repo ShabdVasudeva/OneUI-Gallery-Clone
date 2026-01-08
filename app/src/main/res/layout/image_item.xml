@@ -4,22 +4,56 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:background="@drawable/image_back"
-    android:layout_margin="4dp">
+    android:layout_margin="1dp">
 
     <apw.sec.android.gallery.components.Image
-        android:layout_height="74dp"
+        android:layout_height="80dp"
         android:layout_width="match_parent"
         android:scaleType="centerCrop"
         android:backgroundTint="@color/back"
         android:background="@color/back"
         android:id="@+id/imageView" />
 
+    <!-- Video duration overlay container (bottom left) -->
+    <LinearLayout
+        android:id="@+id/videoDurationOverlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="3dp"
+        android:background="@drawable/video_duration_background"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="3dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="11dp"
+            android:layout_height="11dp"
+            android:src="@drawable/duration_play"
+            android:layout_marginEnd="1dp"
+            android:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/videoDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
+
+
+    <!-- Center play button (kept for backward compatibility if needed) -->
     <ImageView
-        android:layout_height="24.0dip"
-        android:layout_width="24.0dip"
+        android:layout_height="24dp"
+        android:layout_width="24dp"
         android:src="@drawable/play"
         android:id="@+id/playButton"
         android:visibility="gone"
-        android:layout_gravity="center|center" />
+        android:layout_gravity="center" />
 
 </FrameLayout>

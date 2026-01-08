@@ -49,10 +49,29 @@ class AllActivity: AppCompatActivity(){
 
             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
                 super.onViewCreated(view, savedInstanceState)
+
+
                 val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
                 recyclerView.layoutManager = GridLayoutManager(context, 4)
                 loadImages()
                 recyclerView.adapter = adapter
+
+                // Count media files
+                mediaList?.let {
+                    val videoCount = it.count { file -> file.isVideo() }
+                    val imageCount = it.size - videoCount
+
+                    val parts = mutableListOf<String>()
+                    if (imageCount > 0) parts.add("$imageCount image${if (imageCount > 1) "s" else ""}")
+                    if (videoCount > 0) parts.add("$videoCount video${if (videoCount > 1) "s" else ""}")
+                    val mediaCountText = parts.joinToString(" ")
+
+                    // Set subtitle on the toolbar (need to reference activity binding)
+                    (activity as? AllActivity)?.let { act ->
+                        act.binding.toolbar.toolbar.setSubtitle(mediaCountText)
+                        act.binding.toolbar.setExpandedSubtitle(mediaCountText)
+                    }
+                }
             }
 
             private fun loadImages() {

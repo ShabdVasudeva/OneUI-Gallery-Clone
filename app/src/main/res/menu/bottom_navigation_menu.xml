@@ -7,8 +7,8 @@
     <item
         android:id="@+id/images"
         android:name="Images"
-        android:icon="@drawable/ic_oui_image_outline"
-        android:title="Images"
+        android:icon="@drawable/images_selector"
+        android:title="Pictures"
         app:showAsAction="always"
         app:iconTint="?actionMenuTextColor"
         android:visible="true"
@@ -17,7 +17,7 @@
     <item
         android:id="@+id/albums"
         android:name="Albums"
-        android:icon="@drawable/ic_oui_automation"
+        android:icon="@drawable/album_selector"
         android:title="Albums"
         app:showAsAction="always"
         app:iconTint="?actionMenuTextColor"

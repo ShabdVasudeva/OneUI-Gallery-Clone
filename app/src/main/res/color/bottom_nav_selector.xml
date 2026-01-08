@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Create this file at: res/color/bottom_navigation_color.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state - Black/Primary color -->
+    <item android:color="?android:attr/textColorPrimary" android:state_checked="true" />
+    <!-- Unselected state - Grey -->
+    <item android:color="?android:attr/textColorSecondary" />
+</selector>

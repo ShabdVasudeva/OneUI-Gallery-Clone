@@ -1,0 +1,32 @@
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="0dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/essentialalbums_name_color" />
+
+        <Button
+            android:id="@+id/view_more_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View all"
+            android:textColor="#1572BC"
+            android:background="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textStyle="normal"
+            android:padding="0dp" />
+    </LinearLayout>

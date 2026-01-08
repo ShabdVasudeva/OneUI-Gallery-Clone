@@ -59,23 +59,33 @@
             android:name=".AllActivity"
             android:exported="true" />
         <activity
-            android:name=".PrivateSafe" />
+            android:name="apw.sec.android.gallery.GroupAlbumActivity"
+            android:exported="true" />
+        <activity
+            android:name=".AllAlbumsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PrivateSafe"
+            android:enableOnBackInvokedCallback="true"/>
         <activity
             android:name=".ViewActivity"
             android:exported="false" />
         <activity
-            android:name="apw.sec.android.gallery.securenv.PrivateImageViewer" />
+            android:name="apw.sec.android.gallery.securenv.PrivateImageViewer"
+            android:enableOnBackInvokedCallback="true"/>
         <activity
             android:name="apw.sec.android.gallery.AlbumViewer"
             android:exported="true" />
         <activity
             android:name=".SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:enableOnBackInvokedCallback="true"/>
 
         <activity
             android:name=".AboutActivity"
-            android:exported="true"/>
-        
+            android:exported="true"
+            android:enableOnBackInvokedCallback="true"/>
+
     </application>
 
 </manifest>

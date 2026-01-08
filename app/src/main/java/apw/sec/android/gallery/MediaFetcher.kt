@@ -15,7 +15,7 @@ class MediaFetcher(private val context: Context) {
         mediaFiles.addAll(fetchMediaFromFolder(contentResolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "Pictures/Screenshots"))
         mediaFiles.addAll(fetchMediaFromFolder(contentResolver, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "DCIM"))
 
-        return mediaFiles
+        return mediaFiles.sortedByDescending { it.dateAdded ?: 0L }
     }
 
     fun fetchMediaFromFolder(
@@ -24,11 +24,23 @@ class MediaFetcher(private val context: Context) {
         folderName: String
     ): List<MediaFile> {
         val mediaFiles = mutableListOf<MediaFile>()
-        val projection = arrayOf(
-            MediaStore.MediaColumns._ID,
-            MediaStore.MediaColumns.DISPLAY_NAME,
-            MediaStore.MediaColumns.DATA
-        )
+        val isVideo = mediaUri == MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        val projection = if (isVideo) {
+            arrayOf(
+                MediaStore.MediaColumns._ID,
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.DATA,
+                MediaStore.MediaColumns.DATE_ADDED,
+                MediaStore.Video.Media.DURATION
+            )
+        } else {
+            arrayOf(
+                MediaStore.MediaColumns._ID,
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.DATA,
+                MediaStore.MediaColumns.DATE_ADDED
+            )
+        }
 
         val selection = "${MediaStore.MediaColumns.DATA} LIKE ?"
         val selectionArgs = arrayOf("%$folderName%")
@@ -44,13 +56,28 @@ class MediaFetcher(private val context: Context) {
         cursor?.use {
             val idColumn = it.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
             val nameColumn = it.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
+            val dateAddedColumn = it.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED)
+            val durationColumn = if (isVideo) it.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION) else -1
 
             while (it.moveToNext()) {
                 val id = it.getLong(idColumn)
                 val name = it.getString(nameColumn)
+                val dateAdded = it.getLong(dateAddedColumn)
+                val duration = if (isVideo && durationColumn != -1) it.getLong(durationColumn) else null
                 val contentUri = Uri.withAppendedPath(mediaUri, id.toString())
-                val type = if (mediaUri == MediaStore.Images.Media.EXTERNAL_CONTENT_URI) "Image" else "Video"
-                mediaFiles.add(MediaFile(contentUri.toString(), name, type, null))
+                val type = if (isVideo) "Video" else "Image"
+
+                mediaFiles.add(
+                    MediaFile(
+                        uri = contentUri.toString(),
+                        name = name,
+                        type = type,
+                        folderName = null,
+                        groupName = null,
+                        dateAdded = dateAdded,
+                        duration = duration
+                    )
+                )
             }
         }
 

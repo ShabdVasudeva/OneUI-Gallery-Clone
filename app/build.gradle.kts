@@ -51,6 +51,7 @@ configurations.all{
     exclude(group = "androidx.customview", module = "customview")
     exclude(group = "androidx.coordinatorlayout", module = "coordinatorlayout")
     exclude(group = "com.android.support", module = "support-compat")
+    exclude(group = "androidx.recyclerview", module = "recyclerview")
 }
 
 dependencies {
@@ -61,11 +62,20 @@ dependencies {
     implementation("io.github.oneuiproject.sesl:indexscroll:1.0.3")
     implementation("io.github.oneuiproject:icons:1.0.1")
     implementation("androidx.core:core-splashscreen:1.0.0")
+
+    // ✅ OneUI SESL Components Only (No AndroidX RecyclerView)
     implementation("io.github.oneuiproject.sesl:appcompat:1.3.0")
     implementation("io.github.oneuiproject.sesl:material:1.4.0")
     implementation("io.github.oneuiproject.sesl:recyclerview:1.3.0")
     implementation("io.github.oneuiproject.sesl:preference:1.1.0")
+
+    // ✅ Media3 Exoplayer — Works with OneUI
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
+    implementation("androidx.media3:media3-ui:1.3.1")
+
     implementation("com.github.bumptech.glide:glide:4.15.1")
-    implementation("com.jaredrummler:colorpicker:1.1.0")
+    implementation("androidx.preference:preference-ktx:1.2.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+
+    implementation("com.jaredrummler:colorpicker:1.1.0")
 }

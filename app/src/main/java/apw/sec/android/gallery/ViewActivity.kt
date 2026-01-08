@@ -14,12 +14,27 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.*
 import androidx.viewpager2.widget.ViewPager2
 import apw.sec.android.gallery.data.MediaHub
 import apw.sec.android.gallery.databinding.*
 import java.io.*
 import apw.sec.android.gallery.R
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintDocumentInfo
+import android.print.PrintManager
+import android.os.CancellationSignal
+import android.os.ParcelFileDescriptor
+import android.print.PageRange
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
+import java.io.FileOutputStream
 
 class ViewActivity : AppCompatActivity() {
     private var _binding: ActivityViewBinding? = null
@@ -36,12 +51,11 @@ class ViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityViewBinding.inflate(getLayoutInflater())
+        _binding = ActivityViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-        binding.toolbar.setNavigationOnClickListener { finishWithAnimation() }
-        binding.toolbar.setTitleTextColor(Color.WHITE)
-        binding.toolbar.setNavigationIconTint(Color.WHITE)
+
+        // Remove toolbar setup
+        binding.fabBack.setOnClickListener { finishWithAnimation() }
 
         binding.root.setOnTouchListener { _, event ->
             when (event.action) {
@@ -62,7 +76,7 @@ class ViewActivity : AppCompatActivity() {
 
         key = intent.getStringExtra("media_key")
         val sharedPreferences =
-                getSharedPreferences("apw_gallery_preferences", Context.MODE_PRIVATE)
+            getSharedPreferences("apw_gallery_preferences", Context.MODE_PRIVATE)
         val isEnabled = sharedPreferences.getBoolean("ENABLE_FILMSTRIP", true)
         if (isEnabled) {
             binding.filmStripRecyclerView.visibility = View.VISIBLE
@@ -71,52 +85,68 @@ class ViewActivity : AppCompatActivity() {
         }
         startPosition = intent.getIntExtra("position", 0)
         imageList = MediaHub.get(key!!) as MutableList<MediaFile>
-        window.navigationBarColor = "#000000".toColorInt()
-        @Suppress("DEPRECATION")
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        window.statusBarColor = "#000000".toColorInt()
-        val currentPosition = binding.viewPager.currentItem
-        supportActionBar!!.title = getImageDate(applicationContext, imageList[currentPosition].uri.toUri())
-        supportActionBar!!.subtitle = getImageTime(applicationContext, imageList[currentPosition].uri.toUri()) ?: ""
-        binding.toolbar.setSubtitleTextColor(Color.GRAY)
-        binding.viewPager.registerOnPageChangeCallback(
-                object : ViewPager2.OnPageChangeCallback() {
-                    override fun onPageSelected(pos: Int) {
-                        super.onPageSelected(pos)
-                        supportActionBar!!.title =
-                                getImageDate(applicationContext, imageList[pos].uri.toUri())
-                        supportActionBar!!.subtitle =
-                                getImageTime(applicationContext, imageList[pos].uri.toUri()) ?: ""
-                    }
-                }
-        )
+
+        // Ensure layout goes behind status and nav bars
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Apply window insets to FAB instead of toolbar
+        ViewCompat.setOnApplyWindowInsetsListener(binding.fabBack) { view, insets ->
+            val topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            val params = view.layoutParams as ViewGroup.MarginLayoutParams
+            params.topMargin = topInset + 16 // 16dp base margin + status bar height
+            view.layoutParams = params
+            insets
+        }
+
+        // Set black background for system bars
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
+
+        // Disable light icons (use light-on-dark)
+        val controller = WindowInsetsControllerCompat(window, binding.root)
+        controller.isAppearanceLightStatusBars = false
+        controller.isAppearanceLightNavigationBars = false
+
         adapter = ImagePagerAdapter(this@ViewActivity, imageList) { toggleUIVisibility() }
         binding.viewPager.adapter = adapter
         binding.viewPager.setCurrentItem(startPosition, false)
+
         filmstripAdapter =
-                FilmstripAdapter(imageList) { position ->
-                    binding.viewPager.setCurrentItem(position, true)
-                }
+            FilmstripAdapter(imageList) { position ->
+                binding.viewPager.setCurrentItem(position, true)
+            }
         binding.filmStripRecyclerView.layoutManager =
-                LinearLayoutManager(this@ViewActivity, LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(this@ViewActivity, LinearLayoutManager.HORIZONTAL, false)
         binding.filmStripRecyclerView.adapter = filmstripAdapter
+
+        filmstripAdapter.setSelectedPosition(startPosition)
+
+        binding.filmStripRecyclerView.post {
+            val layoutManager = binding.filmStripRecyclerView.layoutManager as LinearLayoutManager
+            val thumbnailWidth = 100 + 30 * 2
+            val centerOffset = (binding.filmStripRecyclerView.width / 2) - (thumbnailWidth / 2)
+            layoutManager.scrollToPositionWithOffset(startPosition, centerOffset)
+        }
+
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.filmStripRecyclerView)
+
         binding.viewPager.registerOnPageChangeCallback(
-                object : ViewPager2.OnPageChangeCallback() {
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
-                        supportActionBar?.title = getImageDate(
-                            this@ViewActivity,
-                            imageList[position].uri.toUri()
-                        )
-                        filmstripAdapter.setSelectedPosition(position)
-                        binding.filmStripRecyclerView.post {
-                            binding.filmStripRecyclerView.smoothScrollToPosition(position)
-                        }
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    filmstripAdapter.setSelectedPosition(position)
+                    binding.filmStripRecyclerView.post {
+                        val layoutManager = binding.filmStripRecyclerView.layoutManager as LinearLayoutManager
+                        val thumbnailWidth = 100 + 30 * 2
+                        val centerOffset = (binding.filmStripRecyclerView.width / 2) - (thumbnailWidth / 2)
+                        layoutManager.scrollToPositionWithOffset(position, centerOffset)
                     }
                 }
+            }
         )
+        binding.bottomBar.seslSetGroupDividerEnabled(true)
+
         binding.bottomBar.itemTextColor = ColorStateList.valueOf(Color.WHITE)
         binding.bottomBar.itemIconTintList = ColorStateList.valueOf(Color.WHITE)
         binding.bottomBar.setOnItemSelectedListener { item ->
@@ -132,26 +162,21 @@ class ViewActivity : AppCompatActivity() {
                     editImage(this, imageList[pos].uri.toUri())
                     true
                 }
+                R.id.favourite -> {
+                    Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+                    true
+                }
                 R.id.delete -> {
-                    var builder = AlertDialog.Builder(this@ViewActivity)
+                    val builder = AlertDialog.Builder(this@ViewActivity)
                     builder.setTitle("Delete this photo?")
                     builder.setMessage(
-                            "This photo will be deleted from this device.\nAlso can not be acessed or restored from gallery."
+                        "This photo will be deleted from this device.\nAlso can not be accessed or restored from gallery."
                     )
                     builder.setNegativeButton("Cancel", null)
-                    builder.setPositiveButton(
-                            "Delete",
-                            object : DialogInterface.OnClickListener {
-                                override fun onClick(p0: DialogInterface?, p1: Int) {
-                                    val pos = binding.viewPager.currentItem
-                                    deleteImageFromUri(
-                                            this@ViewActivity,
-                                            imageList[pos].uri.toUri(),
-                                            pos
-                                    )
-                                }
-                            }
-                    )
+                    builder.setPositiveButton("Delete") { _, _ ->
+                        val pos = binding.viewPager.currentItem
+                        deleteImageFromUri(this@ViewActivity, imageList[pos].uri.toUri(), pos)
+                    }
                     builder.show()
                     true
                 }
@@ -160,8 +185,69 @@ class ViewActivity : AppCompatActivity() {
                     showImageInfoDialog(this, imageList[pos].uri.toUri())
                     true
                 }
+                R.id.rename -> {
+                    val pos = binding.viewPager.currentItem
+                    showRenameDialog(imageList[pos], pos)
+                    true
+                }
+                R.id.setaswallpaper -> {
+                    val pos = binding.viewPager.currentItem
+                    setAsWallpaper(imageList[pos].uri.toUri())
+                    true
+                }
+                R.id.print -> {
+                    val pos = binding.viewPager.currentItem
+                    print(imageList[pos].uri.toUri())
+                    true
+                }
                 else -> false
             }
+        }
+    }
+
+    fun print(imageUri: Uri) {
+        try {
+            val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+            val jobName = "Photo Print"
+
+            // Use PrintHelper for better image printing support
+            val printHelper = androidx.print.PrintHelper(this).apply {
+                scaleMode = androidx.print.PrintHelper.SCALE_MODE_FIT
+            }
+
+            try {
+                val bitmap = contentResolver.openInputStream(imageUri)?.use { inputStream ->
+                    BitmapFactory.decodeStream(inputStream)
+                }
+
+                if (bitmap != null) {
+                    printHelper.printBitmap(jobName, bitmap)
+                } else {
+                    Toast.makeText(this, "Unable to load image", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Error loading image for print", Toast.LENGTH_SHORT).show()
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Unable to print image", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+     fun setAsWallpaper(imageUri: Uri) {
+        try {
+            val intent = Intent(Intent.ACTION_ATTACH_DATA).apply {
+                addCategory(Intent.CATEGORY_DEFAULT)
+                setDataAndType(imageUri, "image/*")
+                putExtra("mimeType", "image/*")
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            startActivity(Intent.createChooser(intent, "Set as wallpaper"))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Unable to set wallpaper", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -176,20 +262,20 @@ class ViewActivity : AppCompatActivity() {
                 adapter.notifyItemRemoved(pos)
                 if (imageList.isEmpty()) {
                     setResult(
-                            RESULT_OK,
-                            Intent().apply {
-                                putExtra("deleted_position", pos)
-                                putExtra("media_key", key)
-                            }
+                        RESULT_OK,
+                        Intent().apply {
+                            putExtra("deleted_position", pos)
+                            putExtra("media_key", key)
+                        }
                     )
                     finish()
                 } else {
                     setResult(
-                            RESULT_OK,
-                            Intent().apply {
-                                putExtra("deleted_position", pos)
-                                putExtra("media_key", key)
-                            }
+                        RESULT_OK,
+                        Intent().apply {
+                            putExtra("deleted_position", pos)
+                            putExtra("media_key", key)
+                        }
                     )
                     val nextIndex = if (pos < imageList.size) pos else imageList.lastIndex
                     binding.viewPager.setCurrentItem(nextIndex, false)
@@ -201,11 +287,11 @@ class ViewActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(
-                            context,
-                            "Please Allow All files access permission first",
-                            Toast.LENGTH_SHORT
-                    )
-                    .show()
+                context,
+                "Please Allow All files access permission first",
+                Toast.LENGTH_SHORT
+            )
+                .show()
             val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
             context.startActivity(intent)
             false
@@ -246,22 +332,22 @@ class ViewActivity : AppCompatActivity() {
                 if (dateTakenIndex != -1) {
                     val dt = cursor.getLong(dateTakenIndex)
                     if (dt > 0)
-                            dateTaken =
-                                    java.text.SimpleDateFormat(
-                                                    "dd MMM yyyy, hh:mm a",
-                                                    java.util.Locale.getDefault()
-                                            )
-                                            .format(java.util.Date(dt))
+                        dateTaken =
+                            java.text.SimpleDateFormat(
+                                "dd MMM yyyy, hh:mm a",
+                                java.util.Locale.getDefault()
+                            )
+                                .format(java.util.Date(dt))
                 }
                 if (dateModifiedIndex != -1) {
                     val dm = cursor.getLong(dateModifiedIndex)
                     if (dm > 0)
-                            dateModified =
-                                    java.text.SimpleDateFormat(
-                                                    "dd MMM yyyy, hh:mm a",
-                                                    java.util.Locale.getDefault()
-                                            )
-                                            .format(java.util.Date(dm * 1000))
+                        dateModified =
+                            java.text.SimpleDateFormat(
+                                "dd MMM yyyy, hh:mm a",
+                                java.util.Locale.getDefault()
+                            )
+                                .format(java.util.Date(dm * 1000))
                 }
             }
         }
@@ -308,7 +394,7 @@ class ViewActivity : AppCompatActivity() {
         }
         val date = dateTaken ?: dateModified ?: return null
         return java.text.SimpleDateFormat("hh:mm a", java.util.Locale.getDefault())
-                .format(java.util.Date(date))
+            .format(java.util.Date(date))
     }
 
     fun getImageDate(context: Context, uri: Uri): String {
@@ -341,7 +427,7 @@ class ViewActivity : AppCompatActivity() {
             "Today"
         } else {
             java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
-                    .format(imageDate)
+                .format(imageDate)
         }
     }
 
@@ -357,34 +443,159 @@ class ViewActivity : AppCompatActivity() {
         return null
     }
 
-    private fun toggleUIVisibility() {
- val sharedPreferences =
- getSharedPreferences("apw_gallery_preferences", Context.MODE_PRIVATE)
- val isFilmstripEnabled = sharedPreferences.getBoolean("ENABLE_FILMSTRIP", true)
-        if (isUIVisible) {
-            binding.toolbar.visibility = View.GONE
-            binding.bottomBar.visibility = View.GONE
-            binding.filmStripRecyclerView.visibility = View.GONE
-        } else {
-            binding.toolbar.visibility = View.VISIBLE
-            binding.bottomBar.visibility = View.VISIBLE
- if (isFilmstripEnabled) {
-            binding.filmStripRecyclerView.visibility = View.VISIBLE
- }
-        }
-        isUIVisible = !isUIVisible
-    }
-
     fun shareImage(context: Context, imageUri: Uri) {
         val shareIntent =
-                Intent(Intent.ACTION_SEND).apply {
-                    type = "image/*"
-                    putExtra(Intent.EXTRA_STREAM, imageUri)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
+            Intent(Intent.ACTION_SEND).apply {
+                type = "image/*"
+                putExtra(Intent.EXTRA_STREAM, imageUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
         context.startActivity(Intent.createChooser(shareIntent, "Share Image"))
     }
 
+    private fun showRenameDialog(media: MediaFile, position: Int) {
+        val view = layoutInflater.inflate(R.layout.alert_dialog, null)
+        val input = view.findViewById<EditText>(R.id.input)
+
+        val displayName = getDisplayName(media.uri.toUri())
+        val dotIndex = displayName.lastIndexOf('.')
+
+        val oldName =
+            if (dotIndex > 0) displayName.substring(0, dotIndex) else displayName
+
+        val extension =
+            if (dotIndex > 0) displayName.substring(dotIndex + 1) else ""
+
+        input.setText(oldName)
+        input.hint = "Enter name"
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Rename")
+            .setView(view)
+            .setPositiveButton("Rename", null)
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.setOnShowListener {
+            // SELECT TEXT AFTER WINDOW ATTACH
+            input.post {
+                input.requestFocus()
+                input.setSelection(0, input.text.length)
+
+                val imm =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
+            }
+
+            val positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positive.isEnabled = oldName.isNotBlank()
+
+            input.addTextChangedListener {
+                positive.isEnabled = it.toString().trim().isNotEmpty()
+            }
+
+            positive.setOnClickListener {
+                val newName = input.text.toString().trim()
+                if (newName.isNotEmpty()) {
+                    val finalName =
+                        if (extension.isNotEmpty()) "$newName.$extension" else newName
+
+                    renameMedia(media.uri.toUri(), finalName, position)
+                    dialog.dismiss()
+                }
+            }
+        }
+
+        dialog.show()
+
+        dialog.window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
+        )
+    }
+
+
+    private fun getDisplayName(uri: Uri): String {
+        contentResolver.query(
+            uri,
+            arrayOf(MediaStore.MediaColumns.DISPLAY_NAME),
+            null,
+            null,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getString(0)
+            }
+        }
+        return "File"
+    }
+
+    private fun renameMedia(uri: Uri, newFileName: String, position: Int) {
+        try {
+            val values = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, newFileName)
+            }
+
+            val rows = contentResolver.update(uri, values, null, null)
+
+            if (rows > 0) {
+                Toast.makeText(this, "Renamed successfully", Toast.LENGTH_SHORT).show()
+
+                // Refresh media list
+                imageList[position].name = newFileName
+                adapter.notifyItemChanged(position)
+                filmstripAdapter.notifyItemChanged(position)
+            } else {
+                Toast.makeText(this, "Rename failed", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: SecurityException) {
+            Toast.makeText(
+                this,
+                "Allow file access permission to rename",
+                Toast.LENGTH_LONG
+            ).show()
+            startActivity(Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Rename error", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun toggleUIVisibility() {
+        val sharedPreferences =
+            getSharedPreferences("apw_gallery_preferences", Context.MODE_PRIVATE)
+        val isFilmstripEnabled = sharedPreferences.getBoolean("ENABLE_FILMSTRIP", true)
+
+        val controller = WindowInsetsControllerCompat(window, binding.root)
+
+        if (isUIVisible) {
+            // Hide app UI elements
+            binding.fabBack.visibility = View.GONE
+            binding.bottomBar.visibility = View.GONE
+            binding.filmStripRecyclerView.visibility = View.GONE
+
+            // Hide system bars
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            // Show app UI elements
+            binding.fabBack.visibility = View.VISIBLE
+            binding.bottomBar.visibility = View.VISIBLE
+            if (isFilmstripEnabled) {
+                binding.filmStripRecyclerView.visibility = View.VISIBLE
+            }
+
+            // Show system bars
+            controller.show(WindowInsetsCompat.Type.systemBars())
+
+            // Ensure icons stay light on dark background
+            controller.isAppearanceLightStatusBars = false
+            controller.isAppearanceLightNavigationBars = false
+        }
+
+        isUIVisible = !isUIVisible
+    }
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

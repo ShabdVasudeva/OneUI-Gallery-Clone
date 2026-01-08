@@ -1,56 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@color/sesl_action_bar_background_color_dark"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:context=".ViewActivity"
     tools:ignore="AppCompatResource">
-    
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:titleTextColor="#ffffff"
-        android:subtitle="Hello"
-        android:background="@android:color/black"
-        android:elevation="4dp"
-        app:background="@color/sesl_action_bar_background_color_dark"
-        app:navigationIcon="@drawable/ic_oui_back"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="#000000"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toTopOf="@id/bottomBar" />
+        android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:background="#000000"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/film_strip_recycler_view"
+            android:padding="4dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:layout_marginBottom="85dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabBack"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/film_strip_recycler_view"
-        android:padding="4dp"
-        android:clipToPadding="false"
-        android:background="#000000"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/bottomBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_oui_back"
+        android:contentDescription="Back"
+        app:tint="@android:color/white"
+        app:backgroundTint="#1A1A1A"
+        app:elevation="6dp"
+        app:fabSize="mini"
+        app:borderWidth="0dp"
+        app:rippleColor="@android:color/transparent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#000000"
-        android:paddingBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_floating_bottom_bar"
+        android:elevation="8dp"
+        app:labelVisibilityMode="labeled"
+        app:itemRippleColor="@android:color/transparent"
         app:menu="@menu/view_menu" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

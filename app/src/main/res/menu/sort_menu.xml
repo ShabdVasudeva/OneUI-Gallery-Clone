@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/sort_custom" android:title="Custom order" />
+    <item android:id="@+id/sort_name_asc" android:title="Name (A to Z)" />
+    <item android:id="@+id/sort_name_desc" android:title="Name (Z to A)" />
+    <item android:id="@+id/sort_count_desc" android:title="Items (most to fewest)" />
+    <item android:id="@+id/sort_count_asc" android:title="Items (fewest to most)" />
+</menu>

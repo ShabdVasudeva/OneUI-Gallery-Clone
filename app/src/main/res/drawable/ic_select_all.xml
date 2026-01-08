@@ -1,0 +1,20 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Outer rectangle -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M3,3h18v18H3z"
+        android:strokeWidth="0"
+        android:fillAlpha="0.1"/>
+
+    <!-- Small squares to represent "select all" -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M4,4h6v6H4zM10,4h6v6h-6zM16,4h4v6h-4z
+                          M4,10h6v6H4zM10,10h6v6h-6zM16,10h4v6h-4z
+                          M4,16h6v4H4zM10,16h6v4h-6zM16,16h4v4h-4z"/>
+</vector>

@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:id="@+id/selection_root"
+    android:paddingStart="0dp"
+    android:paddingEnd="16dp">
+
+    <!-- ALL -->
+    <LinearLayout
+        android:id="@+id/action_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="2dp">
+
+        <ImageView
+            android:id="@+id/all_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="2dp"
+            android:src="@drawable/all_unchecked" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All"
+            android:textSize="12sp"
+            android:textColor="@color/album_name"
+            android:includeFontPadding="false" />
+    </LinearLayout>
+
+    <!-- TITLE -->
+    <TextView
+        android:id="@+id/selection_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="selected"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/album_name"
+        android:includeFontPadding="false" />
+
+    <!-- SPACER -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- CANCEL -->
+    <TextView
+        android:id="@+id/action_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/album_name"
+        android:includeFontPadding="false" />
+</LinearLayout>
