@@ -23,6 +23,7 @@
         android:layout_gravity="bottom"
         app:itemIconTint="@color/bottom_nav_selector"
         app:itemTextColor="@color/bottom_nav_selector"
+        app:itemRippleColor="@android:color/transparent"
         android:visibility="gone"
         app:layout_location="footer"
         app:menu="@menu/bottom_navigation_menu" />
@@ -49,6 +50,7 @@
             android:background="@android:color/transparent"
             app:itemIconTint="@color/bottom_nav_selector"
             app:itemTextColor="@color/bottom_nav_selector"
+            app:itemRippleColor="@android:color/transparent"
             app:menu="@menu/bottom_navigation_menu" />
     </androidx.cardview.widget.CardView>
 

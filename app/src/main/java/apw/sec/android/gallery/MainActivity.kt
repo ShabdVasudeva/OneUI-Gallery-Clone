@@ -196,8 +196,11 @@
                 .getBoolean("ENABLE_FLOATING_TAB_BAR", false)
 
             val bottomNav = if (useNewStyle) newNav else oldNav
+            bottomNav?.itemRippleColor = android.content.res.ColorStateList.valueOf(android.graphics.Color.TRANSPARENT)
+            bottomNav?.itemBackground = null
 
             bottomNav?.setOnItemSelectedListener { item ->
+                bottomNav.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
                 saveLastSelectedTab(item.itemId)
                 when (item.itemId) {
                     R.id.images -> {
