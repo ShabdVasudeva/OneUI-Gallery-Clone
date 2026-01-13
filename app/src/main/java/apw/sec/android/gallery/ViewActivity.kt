@@ -122,10 +122,19 @@ class ViewActivity : AppCompatActivity() {
         filmstripAdapter.setSelectedPosition(startPosition)
 
         binding.filmStripRecyclerView.post {
-            val layoutManager = binding.filmStripRecyclerView.layoutManager as LinearLayoutManager
-            val thumbnailWidth = 100 + 30 * 2
-            val centerOffset = (binding.filmStripRecyclerView.width / 2) - (thumbnailWidth / 2)
-            layoutManager.scrollToPositionWithOffset(startPosition, centerOffset)
+            val recyclerWidth = binding.filmStripRecyclerView.width
+
+            val itemWidthPx = resources.displayMetrics.density * 100  // your FilmImageView width
+            val sidePadding = (recyclerWidth / 2f - itemWidthPx / 2f).toInt()
+
+            binding.filmStripRecyclerView.setPadding(
+                sidePadding,
+                binding.filmStripRecyclerView.paddingTop,
+                sidePadding,
+                binding.filmStripRecyclerView.paddingBottom
+            )
+
+            binding.filmStripRecyclerView.clipToPadding = false
         }
 
         val snapHelper = LinearSnapHelper()
@@ -134,14 +143,8 @@ class ViewActivity : AppCompatActivity() {
         binding.viewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
                     filmstripAdapter.setSelectedPosition(position)
-                    binding.filmStripRecyclerView.post {
-                        val layoutManager = binding.filmStripRecyclerView.layoutManager as LinearLayoutManager
-                        val thumbnailWidth = 100 + 30 * 2
-                        val centerOffset = (binding.filmStripRecyclerView.width / 2) - (thumbnailWidth / 2)
-                        layoutManager.scrollToPositionWithOffset(position, centerOffset)
-                    }
+                    binding.filmStripRecyclerView.smoothScrollToPosition(position)
                 }
             }
         )
@@ -236,7 +239,7 @@ class ViewActivity : AppCompatActivity() {
         }
     }
 
-     fun setAsWallpaper(imageUri: Uri) {
+    fun setAsWallpaper(imageUri: Uri) {
         try {
             val intent = Intent(Intent.ACTION_ATTACH_DATA).apply {
                 addCategory(Intent.CATEGORY_DEFAULT)
