@@ -31,28 +31,15 @@ class ImagePagerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val mediaFile = mediaFiles[position]
-        if (mediaFile.name.endsWith(".mp4")) {
-            Glide.with(context)
-                .load(mediaFile.uri)
-                .into(holder.binding.imageView)
-            holder.binding.playButton.visibility = View.VISIBLE
-            holder.binding.playButton.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndType(Uri.parse(mediaFile.uri), "video/*")
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-                context.startActivity(intent)
-            }
-            holder.binding.imageView.setOnClickListener(null)
 
-        } else {
-            holder.binding.playButton.visibility = View.GONE
-            Glide.with(context)
-                .load(mediaFile.uri)
-                .into(holder.binding.imageView)
-            holder.binding.imageView.setOnClickListener {
-                onImageClick()
-            }
+        // Load media (works for both images and videos)
+        Glide.with(context)
+            .load(mediaFile.uri)
+            .into(holder.binding.imageView)
+
+        // Set click listener to toggle UI for both photos and videos
+        holder.binding.imageView.setOnClickListener {
+            onImageClick()
         }
     }
 

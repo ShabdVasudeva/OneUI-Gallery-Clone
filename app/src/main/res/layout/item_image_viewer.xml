@@ -10,12 +10,4 @@
          android:layout_width="match_parent"
          android:id="@+id/imageView" />
 
-    <ImageView
-         android:layout_height="48.0dip"
-         android:layout_width="48.0dip"
-         android:visibility="gone"
-         android:src="@drawable/play"
-         android:id="@+id/playButton"
-         android:layout_gravity="center|center" />
-
 </FrameLayout>

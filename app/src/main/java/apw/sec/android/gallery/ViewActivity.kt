@@ -145,9 +145,25 @@ class ViewActivity : AppCompatActivity() {
                 override fun onPageSelected(position: Int) {
                     filmstripAdapter.setSelectedPosition(position)
                     binding.filmStripRecyclerView.smoothScrollToPosition(position)
+                    updatePlayButtonVisibility(position)
                 }
             }
         )
+
+        // Set play button click listener
+        binding.playButton.setOnClickListener {
+            val currentPosition = binding.viewPager.currentItem
+            val mediaFile = imageList[currentPosition]
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(Uri.parse(mediaFile.uri), "video/*")
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            startActivity(intent)
+        }
+
+        // Update play button visibility for initial position
+        updatePlayButtonVisibility(startPosition)
+
         binding.bottomBar.seslSetGroupDividerEnabled(true)
 
         binding.bottomBar.itemTextColor = ColorStateList.valueOf(Color.WHITE)
@@ -206,6 +222,21 @@ class ViewActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun updatePlayButtonVisibility(position: Int) {
+        val mediaFile = imageList[position]
+        val isVideo = isVideoFile(mediaFile.uri.toUri())
+        if (isVideo && isUIVisible) {
+            binding.playButton.visibility = View.VISIBLE
+        } else {
+            binding.playButton.visibility = View.GONE
+        }
+    }
+
+    private fun isVideoFile(uri: Uri): Boolean {
+        val mimeType = contentResolver.getType(uri)
+        return mimeType?.startsWith("video/") == true
     }
 
     fun print(imageUri: Uri) {
@@ -576,11 +607,14 @@ class ViewActivity : AppCompatActivity() {
             binding.fabBack.visibility = View.GONE
             binding.bottomBar.visibility = View.GONE
             binding.filmStripRecyclerView.visibility = View.GONE
+            binding.playButton.visibility = View.GONE
 
             // Hide system bars
             controller.hide(WindowInsetsCompat.Type.systemBars())
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+            isUIVisible = false
         } else {
             // Show app UI elements
             binding.fabBack.visibility = View.VISIBLE
@@ -589,6 +623,12 @@ class ViewActivity : AppCompatActivity() {
                 binding.filmStripRecyclerView.visibility = View.VISIBLE
             }
 
+            isUIVisible = true
+
+            // Show play button if current item is a video
+            val currentPosition = binding.viewPager.currentItem
+            updatePlayButtonVisibility(currentPosition)
+
             // Show system bars
             controller.show(WindowInsetsCompat.Type.systemBars())
 
@@ -596,8 +636,6 @@ class ViewActivity : AppCompatActivity() {
             controller.isAppearanceLightStatusBars = false
             controller.isAppearanceLightNavigationBars = false
         }
-
-        isUIVisible = !isUIVisible
     }
     override fun onDestroy() {
         super.onDestroy()
